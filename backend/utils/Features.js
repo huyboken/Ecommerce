@@ -18,12 +18,22 @@ class Features {
     }
 
     filter() {
-        const queryCopy = { ...this.queryStr }
+        const queryCopy = { ...this.queryStr };
 
         //Removing some field for category
-        const removeField = ["keyword", "page", "limit"]
+        const removeFields = ["keyword", "page", "limit"];
 
+        removeFields.forEach((key) => delete queryCopy[key]);
 
+        this.query = this.query.find(queryCopy);
+        return this;
+    }
+
+    pagination(resultPerPage) {
+        const currentPage = Number(this.queryStr.page) || 1;
+        const skip = resultPerPage * (currentPage - 1);
+        this.query = this.query.limit(resultPerPage).skip(skip);
+        return this;
     }
 }
 

@@ -13,15 +13,17 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
 });
 
 // get All Product --Admin
-exports.getAllProducts = async (req, res) => {
-    const feature = new Features(Product.find(), req.query).search();
+exports.getAllProducts = catchAsyncErrors(async (req, res) => {
+    const resultPerPage = 8;
+    const productCount = await Product.countDocuments();
+    const feature = new Features(Product.find(), req.query).search().filter().pagination(resultPerPage);
     // const products = await Product.find();
     const products = await feature.query;
     res.status(200).json({
         success: true,
         products,
     });
-};
+});
 
 // update Product --Admin
 exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
