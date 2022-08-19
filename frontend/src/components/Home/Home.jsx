@@ -1,14 +1,29 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import "./Home.css"
 import Header from './Header';
 import bg from "../Assets/background.jpeg";
 import bg2 from "../Assets/background2.jpeg";
 import Carousel from "react-material-ui-carousel";
 import { ToastContainer } from "react-toastify"
+import { getProduct, clearErrors } from "../../actions/ProductActions"
+import ProductCard from '../Products/ProductCard';
+import Footer from '../../Footer';
 
 const Home = () => {
+    const dispatch = useDispatch();
+    const { products, error } = useSelector((state) => state.products)
+
+    useEffect(() => {
+        if (error) {
+            alert.error(error);
+            dispatch(clearErrors())
+        }
+        dispatch(getProduct());
+    }, [dispatch, error])
+
     return (
-        <>
+        <div>
             <Header />
             {/* Carousel */}
             <div className="banner">
@@ -93,9 +108,9 @@ const Home = () => {
 
             <h2 className="homeHeading">Featured Products</h2>
             <div className="container" id="container">
-                {/* {products && products.map((product) => (
+                {products && products.map((product) => (
                     <ProductCard key={product._id} product={product} />
-                ))} */}
+                ))}
             </div>
             <ToastContainer
                 position="bottom-center"
@@ -108,9 +123,9 @@ const Home = () => {
                 draggable
                 pauseOnHover
             />
-            {/* <Footer />
-            <BottomTab /> */}
-        </>
+            <Footer />
+            {/* <BottomTab /> */}
+        </div>
     )
 }
 
