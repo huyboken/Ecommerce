@@ -4,17 +4,33 @@ const ErrorHandler = require("../utils/ErrorHandler");
 const sendToken = require("../utils/JwtToken.js");
 const sendMail = require("../utils/sendMail");
 const crypto = require("crypto");
+const cloudinary = require("cloudinary");
 
 //Register user
 exports.createUser = catchAsyncErrors(async (req, res, next) => {
-    const { name, email, password } = req.body;
-    const user = await User.create({
+    const { name, email, password, avatar } = req.body;
+
+    let user = await User.findOne({ email });
+
+    if (user) {
+        return res
+            .status(400)
+            .json({ success: false, message: "User already exists" });
+    }
+
+    const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+        folder: "avatars",
+        width: 150,
+        crop: "scale",
+    });
+
+    user = await User.create({
         name,
         email,
         password,
         avatar: {
-            public_id: "https://test.com",
-            url: "https://test.com",
+            public_id: myCloud.public_id,
+            url: myCloud.secure_url,
         },
     });
 
@@ -111,7 +127,10 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
 exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
     //Create token hash
 
-    const resetPasswordToken = crypto.createHash("sha256").update(req.params.token).digest("hex");
+    const resetPasswordToken = crypto
+        .createHash("sha256")
+        .update(req.params.token)
+        .digest("hex");
 
     const user = await User.findOne({
         resetPasswordToken,
@@ -156,11 +175,13 @@ exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
     const isPasswordMatched = await user.comparePassword(req.body.oldPassword);
 
     if (!isPasswordMatched) {
-        return next(new ErrorHandler("Old password is incorrect", 400))
+        return next(new ErrorHandler("Old password is incorrect", 400));
     }
 
     if (req.body.newPassword !== req.body.confirmPassword) {
-        return next(new ErrorHandler("Password is not matched with each other", 400))
+        return next(
+            new ErrorHandler("Password is not matched with each other", 400)
+        );
     }
 
     user.password = req.body.newPassword;
@@ -175,18 +196,32 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
     const newUserData = {
         name: req.body.name,
         email: req.body.email,
+    };
+    if (req.body.avatar !== "") {
+        const user = await User.findById(req.user.id);
+        const imageId = user.avatar.public_id;
+
+        await cloudinary.v2.uploader.destroy(imageId);
+        const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+            folder: "avatars",
+            width: 150,
+            crop: "scale",
+        });
+        newUserData.avatar = {
+            public_id: myCloud.public_id,
+            url: myCloud.secure_url,
+        };
     }
-    //we add cloudinary letter then we are giving condition for the avatar
     const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
         new: true,
-        runValidators: false,
-        useFindAndModify: false
+        runValidators: true,
+        useFindAndModify: false,
     });
     res.status(200).json({
         success: true,
-        user
-    })
-})
+        user,
+    });
+});
 
 //get all users --Admin
 exports.getAllUsers = catchAsyncErrors(async (req, res, next) => {
@@ -194,8 +229,8 @@ exports.getAllUsers = catchAsyncErrors(async (req, res, next) => {
 
     res.status(200).json({
         success: true,
-        users
-    })
+        users,
+    });
 });
 
 //get single user details --Admin
@@ -203,12 +238,12 @@ exports.getSingleUser = catchAsyncErrors(async (req, res, next) => {
     const user = await User.findById(req.params.id);
 
     if (!user) {
-        return next(new ErrorHandler("User is not fond with this", 400))
+        return next(new ErrorHandler("User is not fond with this", 400));
     }
     res.status(200).json({
         success: true,
-        user
-    })
+        user,
+    });
 });
 
 //change user Role --Admin
@@ -217,34 +252,37 @@ exports.updateUserRole = catchAsyncErrors(async (req, res, next) => {
         name: req.body.name,
         email: req.body.email,
         role: req.body.role,
-    }
+    };
 
     const user = await User.findByIdAndUpdate(req.params.id, newUserData, {
         new: true,
         runValidators: false,
-        useFindAndModify: false
+        useFindAndModify: false,
     });
 
     res.status(200).json({
         success: true,
-        user
-    })
+        user,
+    });
 });
 
 //Delete user --Admin
 exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
-
     //we remove cloudinary letter then we are giving condition for the avatar
     const user = await User.findById(req.params.id);
 
+    const imageId = user.avatar.public_id;
+
+    await cloudinary.v2.uploader.upload(imageId);
+
     if (!user) {
-        return next(new ErrorHandler("User is not found with this id", 400))
+        return next(new ErrorHandler("User is not found with this id", 400));
     }
 
     await user.remove();
 
     res.status(200).json({
         success: true,
-        message: "User deleted succesfully"
+        message: "User deleted succesfully",
     });
 });

@@ -16,6 +16,7 @@ img.CarouselImage {
 }
 .first__varse {
   margin: auto;
+  width: 350px !important;
 }
 .varse__2 {
   width: 50%;
