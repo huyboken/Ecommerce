@@ -1,18 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import MetaData from "../More/MetaData";
+import MetaData from "../../more/MetaData";
 import "./LoginSignup.css";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import FaceIcon from "@material-ui/icons/Face";
 import { useDispatch, useSelector } from "react-redux";
-import Loader from "../More/Loader";
+import Loader from "../../more/Loader";
+import { useAlert } from "react-alert";
 import { clearErrors, login, register } from "../../actions/UserAction";
 
 const LoginSignup = ({ history, location }) => {
     const dispatch = useDispatch();
-
+    const alert = useAlert();
     const { error, loading, isAuthenticated } = useSelector(
         (state) => state.user
     );
@@ -67,7 +68,7 @@ const LoginSignup = ({ history, location }) => {
 
     useEffect(() => {
         if (error) {
-            alert(error);
+            alert.error(error);
             dispatch(clearErrors());
         }
         if (isAuthenticated) {

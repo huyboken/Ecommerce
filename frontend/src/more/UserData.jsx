@@ -14,7 +14,7 @@ import HomeIcon from "@material-ui/icons/Home";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from 'react-toastify';
-import { logout } from "../../actions/UserAction";
+import { logout } from "../actions/UserAction";
 
 const UserData = ({ user }) => {
 
@@ -104,7 +104,7 @@ const UserData = ({ user }) => {
 
     function logoutUser() {
         dispatch(logout());
-        toast.success("Logout Successfully");
+        alert("Logout Successfully");
     }
 
     return (

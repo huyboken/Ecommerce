@@ -3,8 +3,8 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Footer from "../../Footer";
 import Header from "../Home/Header";
-import Loader from "../More/Loader";
-import MetaData from "../More/MetaData";
+import Loader from "../../more/Loader";
+import MetaData from "../../more/MetaData";
 import "./Profile.css";
 
 const Profile = ({ history }) => {

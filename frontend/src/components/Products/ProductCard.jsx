@@ -1,8 +1,13 @@
-import React from 'react';
+import React from "react";
 import { Link } from "react-router-dom";
-import "./Product.css";
-
+import { Rating } from "@material-ui/lab";
 const ProductCard = ({ product }) => {
+    const options = {
+        value: product.ratings,
+        readOnly: true,
+        precision: 0.5,
+    };
+
     return (
         <>
             <Link className="ProductCard" to={`/product/${product._id}`}>
@@ -13,7 +18,7 @@ const ProductCard = ({ product }) => {
                 />
                 <p className="productName">{product.name}</p>
                 <div>
-                    {/* <Rating {...options} /> */}
+                    <Rating {...options} />
                     <span>({product.numOfReviews} Reviews)</span>
                 </div>
                 <div
@@ -38,7 +43,7 @@ const ProductCard = ({ product }) => {
                 </div>
             </Link>
         </>
-    )
-}
+    );
+};
 
-export default ProductCard
+export default ProductCard;

@@ -27,7 +27,7 @@ import {
     USER_DETAILS_FAIL,
     USER_DETAILS_REQUEST,
     USER_DETAILS_SUCCESS,
-} from "../contans/UserContans";
+} from "../constans/UserContans";
 
 export const userReducer = (state = { user: {} }, action) => {
     switch (action.type) {
@@ -92,13 +92,13 @@ export const profileReducer = (state = {}, action) => {
             return {
                 ...state,
                 loading: false,
-                isUpdate: action.payload,
+                isUpdated: action.payload,
             };
         case DELETE_USER_SUCCESS:
             return {
                 ...state,
                 loading: false,
-                isDelete: action.payload.success,
+                isDeleted: action.payload.success,
                 message: action.payload.message,
             };
 
@@ -116,13 +116,13 @@ export const profileReducer = (state = {}, action) => {
         case UPDATE_USER_RESET:
             return {
                 ...state,
-                isUpdate: false,
+                isUpdated: false,
             };
 
         case DELETE_USER_RESET:
             return {
                 ...state,
-                isDelete: false,
+                isDeleted: false,
             };
 
         case CLEAR_ERRORS:

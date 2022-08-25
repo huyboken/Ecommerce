@@ -4,10 +4,10 @@ import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import FaceIcon from "@material-ui/icons/Face";
 import { useDispatch, useSelector } from "react-redux";
 import { clearErrors, loadUser, updateProfile } from "../../actions/UserAction";
-import Loader from "../More/Loader";
-import MetaData from "../More/MetaData";
+import Loader from "../../more/Loader";
+import MetaData from "../../more/MetaData";
 import { ToastContainer, toast } from "react-toastify";
-import { UPDATE_PROFILE_RESET } from "../../contans/UserContans";
+import { UPDATE_PROFILE_RESET } from "../../constans/UserContans";
 
 const EditProfile = ({ history }) => {
     const dispatch = useDispatch();
@@ -31,8 +31,6 @@ const EditProfile = ({ history }) => {
         myForm.set("avatar", avatar);
         dispatch(updateProfile(myForm));
     };
-
-    // console.log(avatar);
 
     const updateProfileDataChange = (e) => {
         const reader = new FileReader();

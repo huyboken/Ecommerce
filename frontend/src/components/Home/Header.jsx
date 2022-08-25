@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import "./Header.css";
 import "../../App.css";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 window.addEventListener("scroll", () => {
     if (window.pageYOffset > 100) {
@@ -13,6 +14,7 @@ window.addEventListener("scroll", () => {
 })
 
 const Header = () => {
+    const { cartItems } = useSelector((state) => state.cart)
     const switcherTab = useRef(null);
     return (
         <div className="Header">
@@ -213,7 +215,7 @@ const Header = () => {
                                     right: "3.5%",
                                 }}
                             >
-                                {/* <span>{cartItems.length}</span> */}
+                                <span>{cartItems.length}</span>
                             </div>
                         </div>
                     </div>

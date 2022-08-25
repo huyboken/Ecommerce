@@ -24,7 +24,7 @@ import {
     UPDATE_PROFILE_FAIL,
     UPDATE_PROFILE_REQUEST,
     UPDATE_PROFILE_SUCCESS,
-} from "../contans/UserContans";
+} from "../constans/UserContans";
 
 //Login
 export const login = (email, password) => async (dispatch) => {

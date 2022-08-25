@@ -1,21 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import Carousel from 'react-material-ui-carousel';
 import { useDispatch, useSelector } from 'react-redux';
-import { ToastContainer } from 'react-toastify';
 import { clearErrors, getProductDetails } from '../../actions/ProductActions';
 import Footer from '../../Footer';
 import Header from "../Home/Header";
-import MetaData from '../More/MetaData';
+import MetaData from '../../more/MetaData';
 import { useAlert } from "react-alert";
 import "./ProductDetails.css"
+import BottomTab from '../../more/BottomTab';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { Rating } from "@material-ui/lab";
+import { addItemsToCart } from "../../actions/CartActions";
+
 const ProductDetails = ({ match }) => {
     const { product, error, loading } = useSelector((state) => state.productDetails);
     const dispatch = useDispatch();
-    // const alert1 = useAlert();
+    const alert = useAlert();
 
     useEffect(() => {
         if (error) {
-            alert(error);
+            alert.error(error);
             dispatch(clearErrors())
         }
         dispatch(getProductDetails(match.params.id))
@@ -25,7 +30,7 @@ const ProductDetails = ({ match }) => {
     const [quantity, setQuantity] = useState(1);
 
     const increaseQuantity = () => {
-        if (product.Stock <= quantity) return alert("Products stock limited");
+        if (product.Stock <= quantity) return toast.error("Products stock limited");
         const qty = quantity + 1;
         setQuantity(qty)
     }
@@ -35,6 +40,22 @@ const ProductDetails = ({ match }) => {
         const qty = quantity - 1;
         setQuantity(qty)
     }
+
+
+    const addToCartHandler = () => {
+        if (product.Stock > 0) {
+            dispatch(addItemsToCart(match.params.id, quantity));
+            toast.success("Product Added to cart");
+        } else {
+            toast.error("Product stock limited");
+        }
+    };
+
+    const options = {
+        value: product.ratings,
+        readOnly: true,
+        precision: 0.5,
+    };
 
     return (
         <>
@@ -59,7 +80,7 @@ const ProductDetails = ({ match }) => {
                         <h2>{product.name}</h2>
                     </div>
                     <div className="detailsBlock-2">
-                        {/* <Rating {...options} /> */}
+                        <Rating {...options} />
                         <span>({product.numOfReviews} Reviews)</span>
                     </div>
                     <div className="detailsBlock">
@@ -137,7 +158,7 @@ const ProductDetails = ({ match }) => {
                                     alignItems: "center",
                                     backgroundColor: "#E4EAEC",
                                 }}
-                            // onClick={addToCartHandler}
+                                onClick={addToCartHandler}
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -304,7 +325,7 @@ const ProductDetails = ({ match }) => {
                 pauseOnHover
             />
             <Footer />
-            {/* <BottomTab /> */}
+            <BottomTab />
         </>
     )
 }

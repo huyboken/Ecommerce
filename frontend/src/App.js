@@ -7,13 +7,17 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import ProductDetails from "./components/Products/ProductDetails";
 import LoginSignup from "./components/Authentication/LoginSignup";
 import { useSelector } from "react-redux";
-import UserData from "./components/More/UserData";
+import UserData from "./more/UserData";
 import Store from "./store";
 import { loadUser } from "./actions/UserAction";
 import Profile from "./components/User/Profile";
 import ProtectedRoute from "./route/ProtectedRoute";
 import UpdatePassword from "./components/User/UpdatePassword";
 import EditProfile from "./components/User/EditProfile";
+import About from "./components/About/About";
+import Products from "./components/Products/Products";
+import Search from "./components/Products/Search";
+import Support from "./more/Support";
 
 function App() {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -34,6 +38,11 @@ function App() {
         <Route exact path={"/"} component={Home} />
         <Route exact path={"/product/:id"} component={ProductDetails} />
         <Route exact path={"/login"} component={LoginSignup} />
+        <Route exact path={"/about"} component={About} />
+        <Route exact path={"/products"} component={Products} />
+        <Route exact path={"/products/:keyword"} component={Products} />
+        <Route exact path={"/search"} component={Search} />
+        <Route exact path={"/support"} component={Support} />
         <ProtectedRoute exact path={"/me"} component={Profile} />
         <ProtectedRoute exact path={"/me/update"} component={UpdatePassword} />
         <ProtectedRoute exact path={"/me/update/info"} component={EditProfile} />
