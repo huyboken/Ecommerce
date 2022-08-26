@@ -18,6 +18,10 @@ import About from "./components/About/About";
 import Products from "./components/Products/Products";
 import Search from "./components/Products/Search";
 import Support from "./more/Support";
+import Cart from "./components/Cart/Cart";
+import Favourite from "./components/Cart/Favourite";
+import Shipping from "./components/Cart/Shipping";
+
 
 function App() {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -43,6 +47,9 @@ function App() {
         <Route exact path={"/products/:keyword"} component={Products} />
         <Route exact path={"/search"} component={Search} />
         <Route exact path={"/support"} component={Support} />
+        <Route exact path={"/cart"} component={Cart} />
+        <Route exact path={"/favourites"} component={Favourite} />
+        <ProtectedRoute exact path={"/shipping"} component={Shipping} />
         <ProtectedRoute exact path={"/me"} component={Profile} />
         <ProtectedRoute exact path={"/me/update"} component={UpdatePassword} />
         <ProtectedRoute exact path={"/me/update/info"} component={EditProfile} />

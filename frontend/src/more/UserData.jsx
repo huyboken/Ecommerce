@@ -19,6 +19,8 @@ import { logout } from "../actions/UserAction";
 const UserData = ({ user }) => {
 
     const [open, setOpen] = useState(false);
+    const { cartItems } = useSelector((state) => state.cart);
+    const { favouriteItems } = useSelector((state) => state.favourite);
     const history = useHistory();
 
     const scroolEffect = useRef(null);
@@ -41,22 +43,22 @@ const UserData = ({ user }) => {
             icon: (
                 <ShoppingCartIcon
                     style={{
-                        color: "tomato"
+                        color: cartItems.length === 0 ? "" : "tomato"
                     }}
                 />
             ),
-            name: "Cart",
+            name: `Cart (${cartItems.length})`,
             func: cart,
         },
         {
             icon:
                 <HeartIcon
                     style={{
-                        color: "tomato",
+                        color: favouriteItems.length === 0 ? "" : "tomato",
                     }}
                 />,
             name:
-                `Favourite`,
+                `Favourite (${favouriteItems.length})`,
             func: favourite,
         },
         { icon: <PersonIcon />, name: "Profile", func: account },

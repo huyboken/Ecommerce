@@ -14,7 +14,8 @@ window.addEventListener("scroll", () => {
 })
 
 const Header = () => {
-    const { cartItems } = useSelector((state) => state.cart)
+    const { cartItems } = useSelector((state) => state.cart);
+    const { favouriteItems } = useSelector((state) => state.favourite);
     const switcherTab = useRef(null);
     return (
         <div className="Header">
@@ -183,7 +184,7 @@ const Header = () => {
                                 right: "3.5%",
                             }}
                         >
-                            {/* <span>{favouriteItems.length}</span> */}
+                            <span>{favouriteItems.length}</span>
                         </div>
                     </div>
                     <div className="cart__items flex align__items__center">
