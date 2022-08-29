@@ -6,6 +6,7 @@ import Header from "../Home/Header";
 import Loader from "../../more/Loader";
 import MetaData from "../../more/MetaData";
 import "./Profile.css";
+import BottomTab from "../../more/BottomTab";
 
 const Profile = ({ history }) => {
   const { user, isAuthenticated, loading } = useSelector((state) => state.user);
@@ -97,7 +98,7 @@ const Profile = ({ history }) => {
             </div>
           </div>
           <Footer />
-          {/* <BottomTab /> */}
+          <BottomTab />
         </>
       )}
     </>

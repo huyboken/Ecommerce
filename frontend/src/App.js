@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import Header from "./components/Home/Header";
 import Home from "./components/Home/Home";
@@ -21,10 +21,23 @@ import Support from "./more/Support";
 import Cart from "./components/Cart/Cart";
 import Favourite from "./components/Cart/Favourite";
 import Shipping from "./components/Cart/Shipping";
-
+import ConfirmOrder from "./components/Cart/ConfirmOrder";
+import axios from "axios";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import Payment from "./components/Cart/Payment";
+import OrderSuccess from "./components/Cart/OrderSuccess";
+import MoreOption from "./components/User/MoreOption";
+import MyOrder from "./components/User/MyOrder";
 
 function App() {
   const { isAuthenticated, user } = useSelector((state) => state.user);
+
+  const [stripeApiKey, setStripeApiKey] = useState("");
+  async function getStripeApiKey() {
+    const { data } = await axios.get("/api/v2/stripeapikey");
+    setStripeApiKey(data.stripeApiKey);
+  }
 
   useEffect(() => {
     WebFont.load({
@@ -33,11 +46,19 @@ function App() {
       },
     });
     Store.dispatch(loadUser());
+    getStripeApiKey();
   }, []);
 
   return (
     <Router>
       {isAuthenticated && <UserData user={user} />}
+
+      {stripeApiKey && (
+        <Elements stripe={loadStripe(stripeApiKey)}>
+          <ProtectedRoute exact path={"/process/payment"} component={Payment} />
+        </Elements>
+      )}
+
       <Switch>
         <Route exact path={"/"} component={Home} />
         <Route exact path={"/product/:id"} component={ProductDetails} />
@@ -49,10 +70,22 @@ function App() {
         <Route exact path={"/support"} component={Support} />
         <Route exact path={"/cart"} component={Cart} />
         <Route exact path={"/favourites"} component={Favourite} />
+        <Route exact path={"/more"} component={MoreOption} />
         <ProtectedRoute exact path={"/shipping"} component={Shipping} />
+        <ProtectedRoute exact path={"/orders"} component={MyOrder} />
+        <ProtectedRoute
+          exact
+          path={"/order/confirm"}
+          component={ConfirmOrder}
+        />
         <ProtectedRoute exact path={"/me"} component={Profile} />
+        <ProtectedRoute exact path={"/success"} component={OrderSuccess} />
         <ProtectedRoute exact path={"/me/update"} component={UpdatePassword} />
-        <ProtectedRoute exact path={"/me/update/info"} component={EditProfile} />
+        <ProtectedRoute
+          exact
+          path={"/me/update/info"}
+          component={EditProfile}
+        />
       </Switch>
     </Router>
   );

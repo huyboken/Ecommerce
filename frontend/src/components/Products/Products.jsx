@@ -44,6 +44,7 @@ const Products = ({ match }) => {
         setCurrentPage(e);
     };
 
+    console.log(productsCount, resultPerPage)
 
     useEffect(() => {
         if (error) {

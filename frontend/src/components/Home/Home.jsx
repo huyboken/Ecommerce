@@ -9,10 +9,13 @@ import { ToastContainer } from "react-toastify"
 import { getProduct, clearErrors } from "../../actions/ProductActions"
 import ProductCard from '../Products/ProductCard';
 import Footer from '../../Footer';
+import BottomTab from '../../more/BottomTab';
+import { useAlert } from 'react-alert';
 
 const Home = () => {
     const dispatch = useDispatch();
     const { products, error } = useSelector((state) => state.products)
+    const alert = useAlert();
 
     useEffect(() => {
         if (error) {
@@ -124,7 +127,7 @@ const Home = () => {
                 pauseOnHover
             />
             <Footer />
-            {/* <BottomTab /> */}
+            <BottomTab />
         </div>
     )
 }

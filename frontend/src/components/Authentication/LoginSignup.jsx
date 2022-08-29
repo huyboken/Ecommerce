@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
 import MetaData from "../../more/MetaData";
 import "./LoginSignup.css";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
@@ -8,12 +7,12 @@ import LockOpenIcon from "@material-ui/icons/LockOpen";
 import FaceIcon from "@material-ui/icons/Face";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../more/Loader";
-import { useAlert } from "react-alert";
 import { clearErrors, login, register } from "../../actions/UserAction";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const LoginSignup = ({ history, location }) => {
     const dispatch = useDispatch();
-    const alert = useAlert();
     const { error, loading, isAuthenticated } = useSelector(
         (state) => state.user
     );
@@ -68,13 +67,13 @@ const LoginSignup = ({ history, location }) => {
 
     useEffect(() => {
         if (error) {
-            alert.error(error);
+            toast.error(error);
             dispatch(clearErrors());
         }
         if (isAuthenticated) {
             history.push(redirect);
         }
-    }, [dispatch, error, isAuthenticated, history, alert]);
+    }, [dispatch, error, isAuthenticated, history, toast]);
 
     const loginTab = useRef(null);
     const registerTab = useRef(null);

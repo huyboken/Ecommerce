@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Carousel from 'react-material-ui-carousel';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearErrors, getProductDetails } from '../../actions/ProductActions';
+import { clearErrors, getProductDetails, newReview } from '../../actions/ProductActions';
 import Footer from '../../Footer';
 import Header from "../Home/Header";
 import MetaData from '../../more/MetaData';
@@ -13,11 +13,16 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Rating } from "@material-ui/lab";
 import { addItemsToCart } from "../../actions/CartAction";
 import { addFavouriteItemsToCart } from '../../actions/FavouriteAction';
+import ReviewCard from './Review';
+import { NEW_REVIEW_RESET } from '../../constans/ProductConstans';
 
-const ProductDetails = ({ match }) => {
+const ProductDetails = ({ match, history }) => {
     const { product, error, loading } = useSelector((state) => state.productDetails);
+    const [rating, setRating] = useState(0);
+    const [comment, setComment] = useState("")
     const dispatch = useDispatch();
     const alert = useAlert();
+    const { isAuthenticated } = useSelector((state) => state.user)
 
     useEffect(() => {
         if (error) {
@@ -26,6 +31,29 @@ const ProductDetails = ({ match }) => {
         }
         dispatch(getProductDetails(match.params.id))
     }, [dispatch, error])
+
+    const reviewSubmitHandler = (e) => {
+        e.preventDefault();
+
+        const myForm = new FormData();
+
+        myForm.set("rating", rating)
+        myForm.set("comment", comment)
+        myForm.set("productId", match.params.id)
+
+        {
+            isAuthenticated !== true ? history.push("/login?redirect=/") : <></>
+        }
+
+        dispatch(newReview(myForm))
+
+        {
+            comment.length === 0 ? toast.error("Please fill the comment box") :
+                toast.success("Review done successfully reload for watch it")
+        }
+
+        dispatch({ type: NEW_REVIEW_RESET })
+    }
 
     // Increase Qantity
     const [quantity, setQuantity] = useState(1);
@@ -215,11 +243,10 @@ const ProductDetails = ({ match }) => {
                 >
                     {product.reviews && product.reviews[0] ? (
                         <div className="review__option">
-                            {/* {product.reviews &&
+                            {product.reviews &&
                                 product.reviews.map((review) => (
-
-                                    <></>
-                                ))} */}
+                                    <ReviewCard review={review} />
+                                ))}
                         </div>
                     ) : (
                         <p
@@ -267,11 +294,11 @@ const ProductDetails = ({ match }) => {
                                 >
                                     Your Rating*
                                 </span>
-                                {/* <Rating
+                                <Rating
                                     onChange={(e) => setRating(e.target.value)}
                                     value={rating}
                                     size="large"
-                                /> */}
+                                />
                                 <div
                                     style={{
                                         display: "flex",
@@ -284,8 +311,8 @@ const ProductDetails = ({ match }) => {
                             cols="30"
                             rows="6"
                             placeholder="Comment *"
-                            // value={comment}
-                            // onChange={(e) => setComment(e.target.value)}
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
                             style={{
                                 maxWidth: "100%",
                                 color: "#111",
@@ -312,7 +339,7 @@ const ProductDetails = ({ match }) => {
                                 cursor: "pointer",
                                 color: "#fff",
                             }}
-                        // onClick={reviewSubmitHandler}
+                            onClick={reviewSubmitHandler}
                         >
                             Submit
                         </button>

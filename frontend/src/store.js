@@ -7,12 +7,14 @@ import {
 import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 import {
+    newReviewReducer,
     productDetailsReducers,
     productReducer,
 } from "./reducers/ProductReducer";
 import { userReducer, profileReducer } from "./reducers/UserReducer";
 import { cartReducer } from "./reducers/CartReducer";
 import { favouriteReducer } from "./reducers/FavouriteReducer";
+import { orderDetailsReducer, myOrdersReducer, newOrderReducer } from "./reducers/OrderReducer";
 
 const reducer = combineReducers({
     products: productReducer,
@@ -21,6 +23,10 @@ const reducer = combineReducers({
     profile: profileReducer,
     cart: cartReducer,
     favourite: favouriteReducer,
+    order: newOrderReducer,
+    myOrder: myOrdersReducer,
+    myOrderDetails: orderDetailsReducer,
+    newReview: newReviewReducer
 });
 
 let initialState = {
