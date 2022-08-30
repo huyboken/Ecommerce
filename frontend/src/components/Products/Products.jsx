@@ -8,9 +8,11 @@ import { clearErrors, getProduct } from "../../actions/ProductActions";
 import Pagination from "react-js-pagination";
 import "./Products.css";
 import Typography from "@material-ui/core/Typography"
-import { useAlert } from "react-alert";
 import MetaData from "../../more/MetaData";
 import BottomTab from "../../more/BottomTab";
+import 'react-toastify/dist/ReactToastify.css';
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const categories = [
     "Personal",
@@ -25,7 +27,6 @@ const categories = [
 
 const Products = ({ match }) => {
     const dispatch = useDispatch();
-    const alert = useAlert();
     const [currentPage, setCurrentPage] = useState(1);
 
     const [category, setCategory] = useState("");
@@ -48,11 +49,11 @@ const Products = ({ match }) => {
 
     useEffect(() => {
         if (error) {
-            alert.error(error);
+            toast.error(error);
             dispatch(clearErrors())
         }
         dispatch(getProduct(keyword, currentPage, category));
-    }, [dispatch, keyword, currentPage, category, alert, error]);
+    }, [dispatch, keyword, currentPage, category, toast, error]);
 
 
 
@@ -168,6 +169,17 @@ const Products = ({ match }) => {
                         </div>
                     </div>
                     <Footer />
+                    <ToastContainer
+                        position="bottom-center"
+                        autoClose={5000}
+                        hideProgressBar={false}
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                    />
                     <BottomTab />
                 </>
             )}

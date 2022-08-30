@@ -5,21 +5,21 @@ import Header from './Header';
 import bg from "../Assets/background.jpeg";
 import bg2 from "../Assets/background2.jpeg";
 import Carousel from "react-material-ui-carousel";
-import { ToastContainer } from "react-toastify"
+import { ToastContainer, toast } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css';
 import { getProduct, clearErrors } from "../../actions/ProductActions"
 import ProductCard from '../Products/ProductCard';
 import Footer from '../../Footer';
 import BottomTab from '../../more/BottomTab';
-import { useAlert } from 'react-alert';
+
 
 const Home = () => {
     const dispatch = useDispatch();
     const { products, error } = useSelector((state) => state.products)
-    const alert = useAlert();
 
     useEffect(() => {
         if (error) {
-            alert.error(error);
+            toast.error(error);
             dispatch(clearErrors())
         }
         dispatch(getProduct());

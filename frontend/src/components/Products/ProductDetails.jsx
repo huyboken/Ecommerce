@@ -5,7 +5,6 @@ import { clearErrors, getProductDetails, newReview } from '../../actions/Product
 import Footer from '../../Footer';
 import Header from "../Home/Header";
 import MetaData from '../../more/MetaData';
-import { useAlert } from "react-alert";
 import "./ProductDetails.css"
 import BottomTab from '../../more/BottomTab';
 import { ToastContainer, toast } from 'react-toastify';
@@ -21,12 +20,11 @@ const ProductDetails = ({ match, history }) => {
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState("")
     const dispatch = useDispatch();
-    const alert = useAlert();
     const { isAuthenticated } = useSelector((state) => state.user)
 
     useEffect(() => {
         if (error) {
-            alert.error(error);
+            toast.error(error);
             dispatch(clearErrors())
         }
         dispatch(getProductDetails(match.params.id))

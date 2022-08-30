@@ -15,7 +15,7 @@ const Profile = ({ history }) => {
     if (isAuthenticated === false) {
       history.push("/login");
     }
-  }, [history, isAuthenticated]);
+  }, [history, isAuthenticated, user]);
   return (
     <>
       {loading ? (
