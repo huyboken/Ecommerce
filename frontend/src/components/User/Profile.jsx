@@ -83,7 +83,7 @@ const Profile = ({ history }) => {
                   >
                     Joined On:
                   </h4>
-                  <p>{String(user.createdAt).substr(0, 10)}</p>
+                  <p>{String(user.createdAt).substring(0, 10)}</p>
                 </div>
 
                 <div className="change__info">

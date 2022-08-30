@@ -27,7 +27,7 @@ const ReviewCard = ({ review }) => {
                         padding: "0px 15px"
                     }}>
                         <p style={{ fontSize: "1.2vmax", fontWeight: "600", padding: "0px 0px" }}>{review.name}</p>
-                        <p style={{ paddingLeft: "8px", color: "#999999e0" }}>{String(review.time).substr(0, 10)}</p>
+                        <p style={{ paddingLeft: "8px", color: "#999999e0" }}>{String(review.time).substring(0, 10)}</p>
                     </div>
                     <div style={{ padding: "0px 15px", paddingBottom: "5px" }}>
                         <p style={{ lineHeight: "1.3", fontSize: "1.2vmax" }}>{review.comment}</p>

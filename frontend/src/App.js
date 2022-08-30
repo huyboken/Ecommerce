@@ -32,6 +32,9 @@ import MyOrderDetails from "./components/User/MyOrderDetails";
 import Dashboard from "./components/Admin/Dashboard";
 import AllProducts from "./components/Admin/AllProducts";
 import CreateProduct from "./components/Admin/CreateProduct";
+import EditProduct from "./components/Admin/EditProduct";
+import AllOrder from "./components/Admin/AllOrder";
+import UpdateOrder from "./components/Admin/UpdateOrder";
 
 function App() {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -93,6 +96,9 @@ function App() {
         <ProtectedRoute isAdmin={true} exact path={"/dashboard"} component={Dashboard} />
         <ProtectedRoute isAdmin={true} exact path={"/admin/products"} component={AllProducts} />
         <ProtectedRoute isAdmin={true} exact path={"/admin/product"} component={CreateProduct} />
+        <ProtectedRoute isAdmin={true} exact path={"/edit/product/:id"} component={EditProduct} />
+        <ProtectedRoute isAdmin={true} exact path={"/admin/orders"} component={AllOrder} />
+        <ProtectedRoute isAdmin={true} exact path={"/admin/order/:id"} component={UpdateOrder} />
       </Switch>
     </Router>
   );
