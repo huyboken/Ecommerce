@@ -45,15 +45,13 @@ const Products = ({ match }) => {
         setCurrentPage(e);
     };
 
-    console.log(productsCount, resultPerPage)
-
     useEffect(() => {
         if (error) {
             toast.error(error);
             dispatch(clearErrors())
         }
         dispatch(getProduct(keyword, currentPage, category));
-    }, [dispatch, keyword, currentPage, category, toast, error]);
+    }, [dispatch, keyword, currentPage, category, error]);
 
 
 

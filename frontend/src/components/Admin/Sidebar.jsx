@@ -3,7 +3,6 @@ import "./Sidebar.css";
 import { Link } from "react-router-dom";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import AddIcon from "@material-ui/icons/Add";
-import LocalOffer from "@material-ui/icons/LocalOffer";
 import ListAltIcon from "@material-ui/icons/ListAlt";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import PeopleIcon from "@material-ui/icons/People";
@@ -12,7 +11,7 @@ import RateReviewIcon from "@material-ui/icons/RateReview";
 const Sidebar = () => {
 
     const button = () => {
-        let items = document.querySelectorAll(".Dashboard__item");
+        // let items = document.querySelectorAll(".Dashboard__item");
 
     }
 

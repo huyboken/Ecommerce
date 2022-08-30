@@ -28,7 +28,7 @@ const About = () => {
                                 {/* 1st verse */}
                                 <div className="row flex">
                                     <div className="col__2">
-                                        <img src="http://wp.alithemes.com/html/nest/demo/assets/imgs/page/about-1.png" />
+                                        <img src="http://wp.alithemes.com/html/nest/demo/assets/imgs/page/about-1.png" alt="" />
                                     </div>
                                     <div className="col__2">
                                         <div className="meta">
@@ -74,7 +74,7 @@ const About = () => {
                                                 minHeight: "230px"
                                             }}>
                                                 <div className="flex align__items__center justify__content__center image">
-                                                    <img src="http://wp.alithemes.com/html/nest/demo/assets/imgs/theme/icons/icon-1.svg" />
+                                                    <img src="http://wp.alithemes.com/html/nest/demo/assets/imgs/theme/icons/icon-1.svg" alt="" />
                                                 </div>
                                                 <span>Best Prices & Offers</span>
                                                 <p>
@@ -91,7 +91,7 @@ const About = () => {
                                                 minHeight: "230px"
                                             }}>
                                                 <div className="flex align__items__center justify__content__center image">
-                                                    <img src="http://wp.alithemes.com/html/nest/demo/assets/imgs/theme/icons/icon-2.svg" />
+                                                    <img src="http://wp.alithemes.com/html/nest/demo/assets/imgs/theme/icons/icon-2.svg" alt="" />
                                                 </div>
                                                 <span>Best For Trust & Quality</span>
                                                 <p>
@@ -108,7 +108,7 @@ const About = () => {
                                                 minHeight: "230px"
                                             }}>
                                                 <div className="flex align__items__center justify__content__center image">
-                                                    <img src="http://wp.alithemes.com/html/nest/demo/assets/imgs/theme/icons/icon-3.svg" />
+                                                    <img src="http://wp.alithemes.com/html/nest/demo/assets/imgs/theme/icons/icon-3.svg" alt="" />
                                                 </div>
                                                 <span>Fast Delivery System</span>
                                                 <p>
@@ -127,7 +127,7 @@ const About = () => {
                                                 minHeight: "230px"
                                             }}>
                                                 <div className="flex align__items__center justify__content__center image">
-                                                    <img src="http://wp.alithemes.com/html/nest/demo/assets/imgs/theme/icons/icon-4.svg" />
+                                                    <img src="http://wp.alithemes.com/html/nest/demo/assets/imgs/theme/icons/icon-4.svg" alt="" />
                                                 </div>
                                                 <span>Easy Returns Service</span>
                                                 <p>
@@ -145,7 +145,7 @@ const About = () => {
                                                 minHeight: "230px"
                                             }}>
                                                 <div className="flex align__items__center justify__content__center image">
-                                                    <img src="http://wp.alithemes.com/html/nest/demo/assets/imgs/theme/icons/icon-5.svg" />
+                                                    <img src="http://wp.alithemes.com/html/nest/demo/assets/imgs/theme/icons/icon-5.svg" alt="" />
                                                 </div>
                                                 <span>100% satisfication</span>
                                                 <p>
@@ -163,7 +163,7 @@ const About = () => {
                                                 minHeight: "230px"
                                             }}>
                                                 <div className="flex align__items__center justify__content__center image">
-                                                    <img src="http://wp.alithemes.com/html/nest/demo/assets/imgs/theme/icons/icon-6.svg" />
+                                                    <img src="http://wp.alithemes.com/html/nest/demo/assets/imgs/theme/icons/icon-6.svg" alt="" />
                                                 </div>
                                                 <span>Great Daily Deal</span>
                                                 <p>

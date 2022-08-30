@@ -4,7 +4,7 @@ import { Rating } from "@material-ui/lab";
 import Loader from "../../more/Loader"
 
 const ReviewCard = ({ review }) => {
-    const { product, loading } = useSelector(
+    const { loading } = useSelector(
         (state) => state.productDetails
     );
 

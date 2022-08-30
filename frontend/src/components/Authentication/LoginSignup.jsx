@@ -73,7 +73,7 @@ const LoginSignup = ({ history, location }) => {
         if (isAuthenticated) {
             history.push(redirect);
         }
-    }, [dispatch, error, isAuthenticated, history, toast]);
+    }, [dispatch, error, isAuthenticated, history, redirect]);
 
     const loginTab = useRef(null);
     const registerTab = useRef(null);

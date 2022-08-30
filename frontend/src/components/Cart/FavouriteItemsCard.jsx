@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import "./FavouriteItemsCard.css";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 const FavouriteItemsCard = ({ item, deleteFavouriteItems }) => {
-    const dispatch = useDispatch();
     const { product } = useSelector(
         (state) => state.productDetails
     );

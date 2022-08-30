@@ -50,7 +50,7 @@ const CreateProduct = ({ history }) => {
             history.push("/dashboard");
             dispatch({ type: NEW_PRODUCT_RESET });
         }
-    }, [dispatch, alert, error, history, success]);
+    }, [dispatch, error, history, success]);
 
     const createProductSubmitHandler = (e) => {
         e.preventDefault();

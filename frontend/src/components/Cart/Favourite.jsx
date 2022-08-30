@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { deleteFavouriteItemsToCart, deleteOfferFavouriteItemsToCart } from "../../actions/FavouriteAction"
+import { deleteFavouriteItemsToCart } from "../../actions/FavouriteAction"
 import { Typography } from "@material-ui/core";
 import RemoveShoppingCartIcon from "@material-ui/icons/FavoriteBorder";
 import { Link } from "react-router-dom";

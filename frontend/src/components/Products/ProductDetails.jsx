@@ -1,57 +1,59 @@
-import React, { useEffect, useState } from 'react';
-import Carousel from 'react-material-ui-carousel';
-import { useDispatch, useSelector } from 'react-redux';
-import { clearErrors, getProductDetails, newReview } from '../../actions/ProductActions';
-import Footer from '../../Footer';
+import React, { useEffect, useState } from "react";
+import Carousel from "react-material-ui-carousel";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    clearErrors,
+    getProductDetails,
+    newReview,
+} from "../../actions/ProductActions";
+import Footer from "../../Footer";
 import Header from "../Home/Header";
-import MetaData from '../../more/MetaData';
-import "./ProductDetails.css"
-import BottomTab from '../../more/BottomTab';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import MetaData from "../../more/MetaData";
+import "./ProductDetails.css";
+import BottomTab from "../../more/BottomTab";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Rating } from "@material-ui/lab";
 import { addItemsToCart } from "../../actions/CartAction";
-import { addFavouriteItemsToCart } from '../../actions/FavouriteAction';
-import ReviewCard from './Review';
-import { NEW_REVIEW_RESET } from '../../constans/ProductConstans';
+import { addFavouriteItemsToCart } from "../../actions/FavouriteAction";
+import ReviewCard from "./Review";
+import { NEW_REVIEW_RESET } from "../../constans/ProductConstans";
 
 const ProductDetails = ({ match, history }) => {
-    const { product, error, loading } = useSelector((state) => state.productDetails);
+    const { product, error } = useSelector((state) => state.productDetails);
     const [rating, setRating] = useState(0);
-    const [comment, setComment] = useState("")
+    const [comment, setComment] = useState("");
     const dispatch = useDispatch();
-    const { isAuthenticated } = useSelector((state) => state.user)
+    const { isAuthenticated } = useSelector((state) => state.user);
 
     useEffect(() => {
         if (error) {
             toast.error(error);
-            dispatch(clearErrors())
+            dispatch(clearErrors());
         }
-        dispatch(getProductDetails(match.params.id))
-    }, [dispatch, error])
+        dispatch(getProductDetails(match.params.id));
+    }, [dispatch, error, match.params.id]);
 
     const reviewSubmitHandler = (e) => {
         e.preventDefault();
 
         const myForm = new FormData();
 
-        myForm.set("rating", rating)
-        myForm.set("comment", comment)
-        myForm.set("productId", match.params.id)
+        myForm.set("rating", rating);
+        myForm.set("comment", comment);
+        myForm.set("productId", match.params.id);
 
-        {
-            isAuthenticated !== true ? history.push("/login?redirect=/") : <></>
-        }
+        isAuthenticated !== true ? history.push("/login?redirect=/") : <></>;
 
-        dispatch(newReview(myForm))
+        dispatch(newReview(myForm));
 
-        {
-            comment.length === 0 ? toast.error("Please fill the comment box") :
-                toast.success("Review done successfully reload for watch it")
-        }
+        comment.length === 0
+            ? toast.error("Please fill the comment box")
+            : toast.success("Review done successfully reload for watch it");
 
-        dispatch({ type: NEW_REVIEW_RESET })
-    }
+
+        dispatch({ type: NEW_REVIEW_RESET });
+    };
 
     // Increase Qantity
     const [quantity, setQuantity] = useState(1);
@@ -59,15 +61,14 @@ const ProductDetails = ({ match, history }) => {
     const increaseQuantity = () => {
         if (product.Stock <= quantity) return toast.error("Products stock limited");
         const qty = quantity + 1;
-        setQuantity(qty)
-    }
+        setQuantity(qty);
+    };
 
     const decraseQuantity = () => {
-        if (1 >= quantity) return
+        if (1 >= quantity) return;
         const qty = quantity - 1;
-        setQuantity(qty)
-    }
-
+        setQuantity(qty);
+    };
 
     const addToCartHandler = () => {
         if (product.Stock > 0) {
@@ -79,9 +80,9 @@ const ProductDetails = ({ match, history }) => {
     };
 
     const addToFavouriteHandler = () => {
-        dispatch(addFavouriteItemsToCart(match.params.id, quantity))
-        toast.success("Products Added to Favourites")
-    }
+        dispatch(addFavouriteItemsToCart(match.params.id, quantity));
+        toast.success("Products Added to Favourites");
+    };
 
     const options = {
         value: product.ratings,
@@ -242,9 +243,7 @@ const ProductDetails = ({ match, history }) => {
                     {product.reviews && product.reviews[0] ? (
                         <div className="review__option">
                             {product.reviews &&
-                                product.reviews.map((review) => (
-                                    <ReviewCard review={review} />
-                                ))}
+                                product.reviews.map((review) => <ReviewCard review={review} />)}
                         </div>
                     ) : (
                         <p
@@ -358,7 +357,7 @@ const ProductDetails = ({ match, history }) => {
             <Footer />
             <BottomTab />
         </>
-    )
-}
+    );
+};
 
-export default ProductDetails
+export default ProductDetails;

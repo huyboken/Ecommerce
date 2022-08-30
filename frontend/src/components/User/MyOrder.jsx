@@ -16,8 +16,6 @@ const MyOrder = () => {
 
     const { loading, error, orders } = useSelector((state) => state.myOrder);
 
-    console.log(orders)
-
     const { user } = useSelector((state) => state.user);
 
     const columns = [
@@ -85,7 +83,7 @@ const MyOrder = () => {
         }
 
         dispatch(myOrders());
-    }, [dispatch, alert, error]);
+    }, [dispatch, error]);
 
     return (
         <Fragment>

@@ -177,7 +177,7 @@ export const deleteProductReducer = (state = {}, action) => {
     }
 };
 
-export const newProductReducer = (state = { product: [] }, action) => {
+export const newProductReducer = (state = { product: {} }, action) => {
     switch (action.type) {
         case NEW_PRODUCT_REQUEST:
             return {

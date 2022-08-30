@@ -4,7 +4,7 @@ import "./Dashboard.css";
 import { Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { Doughnut, Line } from "react-chartjs-2";
-import Chart from 'chart.js/auto';
+// import Chart from 'chart.js/auto';
 import { useSelector, useDispatch } from "react-redux";
 import MetaData from "../../more/MetaData.jsx";
 import Loading from "../../more/Loader.jsx";

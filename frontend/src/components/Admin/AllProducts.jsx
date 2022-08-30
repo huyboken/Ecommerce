@@ -33,7 +33,7 @@ const AllProducts = ({ history }) => {
 
     useEffect(() => {
         if (error) {
-            alert(error);
+            toast.error(error);
             dispatch(clearErrors());
         }
         if (deleteError) {
@@ -47,7 +47,7 @@ const AllProducts = ({ history }) => {
             dispatch({ type: DELETE_PRODUCT_RESET });
         }
         dispatch(getAdminProduct());
-    }, [dispatch, alert, error, history]);
+    }, [dispatch, error, history, deleteError, isDeleted]);
 
     const columns = [
         { field: "id", headerName: "Product ID", minWidth: 200, flex: 0.5 },

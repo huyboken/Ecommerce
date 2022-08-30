@@ -31,8 +31,8 @@ const Home = () => {
             {/* Carousel */}
             <div className="banner">
                 <Carousel>
-                    <img src={bg} className="bgImg" />
-                    <img src={bg2} className="bgImg" />
+                    <img src={bg} className="bgImg" alt='bg1' />
+                    <img src={bg2} className="bgImg" alt='bg2' />
                 </Carousel>
                 <div className="home__content">
                     <div style={{
