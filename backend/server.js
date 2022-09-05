@@ -10,10 +10,12 @@ process.on("uncaughtException", (err) => {
     console.log(`Shutting down server for Handling uncaught Exception`)
 })
 
-//config
-dotenv.config({
-    path: "backend/config/.env"
-});
+// config
+if (process.env.NODE_ENV !== "PRODUCTION") {
+    require("dotenv").config({
+        path: "backend/config/.env"
+    })
+}
 
 //connect database
 connectDatabase();
