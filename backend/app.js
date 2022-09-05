@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const fileUpload = require("express-fileupload")
 const dotenv = require("dotenv");
+const path = require("path");
 
 app.use(express.json());
 app.use(cookieParser());
@@ -12,15 +13,11 @@ app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 app.use(fileUpload({ useTempFiles: true }));
 
 // config
-// if (process.env.NODE_ENV !== "PRODUCTION") {
-// require("dotenv").config({
-//     path: "backend/config/.env"
-// })
-// }
-
-dotenv.config({
-    path: "backend/config/.env"
-});
+if (process.env.NODE_ENV !== "PRODUCTION") {
+    require("dotenv").config({
+        path: "backend/config/.env"
+    })
+}
 
 //route imports
 const product = require("./routes/ProductRoute");
