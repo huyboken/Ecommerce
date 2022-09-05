@@ -129,7 +129,7 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
 
     product = await Product.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
-        runValidators: false,
+        runValidators: true,
         useUnified: false,
     });
     res.status(200).json({

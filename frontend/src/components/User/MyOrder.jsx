@@ -69,7 +69,7 @@ const MyOrder = () => {
     orders &&
         orders.forEach((item, index) => {
             rows.push({
-                // itemsQty: item.orderItems.length === 0 ? 1 : item.orderItems.length,
+                itemsQty: item.orderItems.length === 0 ? 1 : item.orderItems.length,
                 id: item._id,
                 status: item.orderStatus,
                 amount: item.totalPrice,

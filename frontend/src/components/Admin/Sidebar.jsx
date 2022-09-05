@@ -11,7 +11,7 @@ import RateReviewIcon from "@material-ui/icons/RateReview";
 const Sidebar = () => {
 
     const button = () => {
-        // let items = document.querySelectorAll(".Dashboard__item");
+        let items = document.querySelectorAll(".Dashboard__item");
 
     }
 

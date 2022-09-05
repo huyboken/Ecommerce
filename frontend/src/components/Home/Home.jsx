@@ -15,7 +15,7 @@ import BottomTab from '../../more/BottomTab';
 
 const Home = () => {
     const dispatch = useDispatch();
-    const { products, error } = useSelector((state) => state.products)
+    const { products, error, loading } = useSelector((state) => state.products)
 
     useEffect(() => {
         if (error) {
@@ -23,7 +23,7 @@ const Home = () => {
             dispatch(clearErrors())
         }
         dispatch(getProduct());
-    }, [dispatch, error])
+    }, [dispatch, error, loading])
 
     return (
         <div>

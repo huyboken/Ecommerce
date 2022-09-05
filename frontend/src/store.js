@@ -8,19 +8,21 @@ import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 import {
     deleteProductReducer,
+    deleteReviewReducer,
     newProductReducer,
     newReviewReducer,
-    productDetailsReducers,
-    productReducer,
+    productDetailsReducer,
+    productsReducer,
+    productReviewsReducer,
 } from "./reducers/ProductReducer";
-import { userReducer, profileReducer, allUsersReducer } from "./reducers/UserReducer";
+import { userReducer, profileReducer, allUsersReducer, userDetailsReducer } from "./reducers/UserReducer";
 import { cartReducer } from "./reducers/CartReducer";
 import { favouriteReducer } from "./reducers/FavouriteReducer";
 import { orderDetailsReducer, myOrdersReducer, newOrderReducer, allOrdersReducer, orderReducer } from "./reducers/OrderReducer";
 
 const reducer = combineReducers({
-    products: productReducer,
-    productDetails: productDetailsReducers,
+    products: productsReducer,
+    productDetails: productDetailsReducer,
     user: userReducer,
     profile: profileReducer,
     cart: cartReducer,
@@ -33,7 +35,10 @@ const reducer = combineReducers({
     allUsers: allUsersReducer,
     deleteProduct: deleteProductReducer,
     createProduct: newProductReducer,
-    deleteOrder: orderReducer
+    deleteOrder: orderReducer,
+    userDetails: userDetailsReducer,
+    deleteReview: deleteReviewReducer,
+    productReviews: productReviewsReducer,
 });
 
 let initialState = {

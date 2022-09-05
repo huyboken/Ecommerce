@@ -23,6 +23,7 @@ const MyOrderDetails = ({ match }) => {
 
         dispatch(getOrderDetails(match.params.id));
     }, [dispatch, error, match.params.id]);
+
     return (
         <>
             {loading ? (

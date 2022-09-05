@@ -8,24 +8,24 @@ import MetaData from "../../more/MetaData";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import SideBar from "./Sidebar";
-import {
-    getAllOrders,
-    clearErrors,
-    deleteOrder,
-} from "../../actions/OrderAction";
-import { DELETE_ORDER_RESET } from "../../constans/OrderConstans";
+import { getAllUsers, clearErrors, deleteUser } from "../../actions/UserAction";
+import { DELETE_USER_RESET } from "../../constans/UserContans";
 import { ToastContainer, toast } from 'react-toastify';
 
+const AllUsers = ({ history }) => {
 
-const AllOrder = ({ history }) => {
     const dispatch = useDispatch();
 
-    const { error, orders } = useSelector((state) => state.allOrders);
+    const { error, users } = useSelector((state) => state.allUsers);
 
-    const { error: deleteError, isDeleted } = useSelector((state) => state.deleteOrder);
+    const {
+        error: deleteError,
+        isDeleted,
+        message,
+    } = useSelector((state) => state.profile);
 
-    const deleteOrderHandler = (id) => {
-        dispatch(deleteOrder(id));
+    const deleteUserHandler = (id) => {
+        dispatch(deleteUser(id));
     };
 
     useEffect(() => {
@@ -40,42 +40,41 @@ const AllOrder = ({ history }) => {
         }
 
         if (isDeleted) {
-            toast.success("Order Deleted Successfully");
-            history.push("/admin/orders");
-            dispatch({ type: DELETE_ORDER_RESET });
+            toast.success(message);
+            history.push("/admin/users");
+            dispatch({ type: DELETE_USER_RESET });
         }
 
-        dispatch(getAllOrders());
-    }, [dispatch, error, deleteError, history, isDeleted]);
+        dispatch(getAllUsers());
+    }, [dispatch, error, deleteError, history, isDeleted, message]);
 
     const columns = [
-        { field: "id", headerName: "Order ID", minWidth: 300, flex: 1 },
+        { field: "id", headerName: "User ID", minWidth: 180, flex: 0.8 },
 
         {
-            field: "status",
-            headerName: "Status",
+            field: "email",
+            headerName: "Email",
+            minWidth: 200,
+            flex: 1,
+        },
+        {
+            field: "name",
+            headerName: "Name",
             minWidth: 150,
             flex: 0.5,
+        },
+
+        {
+            field: "role",
+            headerName: "Role",
+            type: "number",
+            minWidth: 150,
+            flex: 0.3,
             cellClassName: (params) => {
-                return params.getValue(params.id, "status") === "Delivered"
+                return params.getValue(params.id, "role") === ("admin")
                     ? "greenColor"
                     : "redColor";
             },
-        },
-        {
-            field: "itemsQty",
-            headerName: "Items Qty",
-            type: "number",
-            minWidth: 150,
-            flex: 0.4,
-        },
-
-        {
-            field: "amount",
-            headerName: "Amount",
-            type: "number",
-            minWidth: 270,
-            flex: 0.5,
         },
 
         {
@@ -88,13 +87,13 @@ const AllOrder = ({ history }) => {
             renderCell: (params) => {
                 return (
                     <Fragment>
-                        <Link to={`/admin/order/${params.getValue(params.id, "id")}`}>
+                        <Link to={`/admin/user/${params.getValue(params.id, "id")}`}>
                             <EditIcon />
                         </Link>
 
                         <Button
                             onClick={() =>
-                                deleteOrderHandler(params.getValue(params.id, "id"))
+                                deleteUserHandler(params.getValue(params.id, "id"))
                             }
                         >
                             <DeleteIcon />
@@ -107,24 +106,24 @@ const AllOrder = ({ history }) => {
 
     const rows = [];
 
-    orders &&
-        orders.forEach((item) => {
+    users &&
+        users.forEach((item) => {
             rows.push({
                 id: item._id,
-                itemsQty: item.orderItems.length,
-                amount: item.totalPrice,
-                status: item.orderStatus,
+                role: item.role,
+                email: item.email,
+                name: item.name,
             });
         });
 
     return (
         <Fragment>
-            <MetaData title={`ALL ORDERS - Admin`} />
+            <MetaData title={`ALL USERS - Admin`} />
 
             <div className="dashboard">
                 <SideBar />
                 <div className="productListContainer">
-                    <h1 id="productListHeading">ALL ORDERS</h1>
+                    <h1 id="productListHeading">ALL USERS</h1>
 
                     <DataGrid
                         rows={rows}
@@ -151,4 +150,4 @@ const AllOrder = ({ history }) => {
     );
 };
 
-export default AllOrder;
+export default AllUsers;
