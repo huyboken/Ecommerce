@@ -132,7 +132,7 @@ export const updatePassword = (password) => async (dispatch) => {
 };
 
 //Forgot password
-export const forgotpassword = (email) => async (dispatch) => {
+export const forgotPassword = (email) => async (dispatch) => {
     try {
         dispatch({ type: FORGOT_PASSWORD_REQUEST });
         const config = { headers: { "Content-Type": "application/json" } };
@@ -210,6 +210,8 @@ export const updateUser = (id, userData) => async (dispatch) => {
         dispatch({ type: UPDATE_USER_FAIL, payload: error.response.data.message })
     }
 }
+
+
 
 //Clearing errors
 export const clearErrors = () => async (dispatch) => {

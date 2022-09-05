@@ -17,7 +17,7 @@ const productSchema = new mongoose.Schema({
         required: [true, "Please add a price for your product"],
         maxLength: [8, "Price can not exceed than 8 characters"],
     },
-    discountPrice: {
+    offerPrice: {
         type: String,
         maxLength: [4, "Discount price can not exceed than 4 characters"],
     },

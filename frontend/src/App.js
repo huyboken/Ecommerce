@@ -38,6 +38,9 @@ import UpdateOrder from "./components/Admin/UpdateOrder";
 import AllUsers from "./components/Admin/AllUsers";
 import UpdateUser from "./components/Admin/UpdateUser";
 import AllReviews from "./components/Admin/AllReviews";
+import ForgotPassword from "./components/User/ForgotPassword";
+import ResetPassword from "./components/User/ResetPassword";
+import NotFound from "./more/NotFound";
 
 function App() {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -80,6 +83,8 @@ function App() {
         <Route exact path={"/cart"} component={Cart} />
         <Route exact path={"/favourites"} component={Favourite} />
         <Route exact path={"/more"} component={MoreOption} />
+        <Route exact path={"/password/forgot"} component={ForgotPassword} />
+        <Route exact path="/password/reset/:token" component={ResetPassword} />
         <ProtectedRoute exact path={"/shipping"} component={Shipping} />
         <ProtectedRoute exact path={"/orders"} component={MyOrder} />
         <ProtectedRoute
@@ -150,6 +155,9 @@ function App() {
           path={"/admin/reviews"}
           component={AllReviews}
         />
+        <Route component={
+          window.location.pathname === "/process/payment" ? null : NotFound
+        } />
       </Switch>
     </Router>
   );
