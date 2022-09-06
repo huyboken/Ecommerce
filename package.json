@@ -4,13 +4,14 @@
   "description": "",
   "main": "backend/server.js",
   "engines": {
-    "node": "14.20.0"
+    "node": "14.20.0",
+    "npm": "6.14.17"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node backend/server.js",
     "dev": "nodemon backend/server.js --ignore client",
-    "heroku-postbuild":"NPM_CONFIG_PRODUCTION=false && npm install --prefix frontend && npm run build --prefix frontend"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false && npm install --prefix frontend && npm run build --prefix frontend"
   },
   "author": "bac bui",
   "license": "ISC",
