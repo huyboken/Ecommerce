@@ -71,6 +71,7 @@ export default {
     LIGHT_GRAY: "#d3d3d3",
     LIGHT_GREEN: "#90ee90",
     LIGHT_GREY: "#d3d3d3",
+    LIGHT_GREY1: "#e5e5e5",
     LIGHT_PINK: "#ffb6c1",
     LIGHT_SALMON: "#ffa07a",
     LIGHT_SEA_GREEN: "#20b2aa",
