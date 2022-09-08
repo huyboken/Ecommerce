@@ -1,4 +1,11 @@
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+    Image,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Swiper from 'react-native-swiper';
 import { Colors, Images } from '../../Constant';
@@ -22,7 +29,11 @@ const Banner = () => {
                         autoplay={true}
                         showsButtons={false}
                         autoplayTimeout={4}
-                        style={{ height: Display.width / 2 }}>
+                        style={{
+                            height: Platform.isPad
+                                ? Display.width / 2 - 50
+                                : Display.width / 2,
+                        }}>
                         {bannerData.map(item => {
                             return (
                                 <Image
@@ -34,7 +45,6 @@ const Banner = () => {
                             );
                         })}
                     </Swiper>
-                    <View style={{ height: 20 }} />
                 </View>
             </View>
         </ScrollView>
@@ -50,11 +60,11 @@ const styles = StyleSheet.create({
     },
     swiper: {
         width: Display.width,
-        marginTop: '5%',
+        marginTop: 20,
         alignItems: 'center',
     },
     banner: {
-        height: Display.width / 2,
+        height: Platform.isPad ? Display.width / 2 - 70 : Display.width / 2 - 20,
         width: Display.width - 40,
         borderRadius: 10,
         marginHorizontal: 20,

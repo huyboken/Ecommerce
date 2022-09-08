@@ -22,13 +22,22 @@ const HomeProduct = () => {
         <View style={styles.container}>
             <Text style={styles.titleText}>Best Selling</Text>
             {loading ? <ActivityIndicator color={Colors.BLACK} /> :
-                <>
+                <View style={styles.productCard}>
                     {products && products.map((item) => {
                         return (
-                            <ProductCard key={item._id} products={item} />
+                            <ProductCard key={item._id} product={item} />
                         )
                     })}
-                </>
+                </View>
+            }
+            {loading ? <ActivityIndicator color={Colors.BLACK} /> :
+                <View style={styles.productCard}>
+                    {products && products.map((item) => {
+                        return (
+                            <ProductCard key={item._id} product={item} />
+                        )
+                    })}
+                </View>
             }
         </View>
     )
@@ -46,5 +55,12 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: "#333",
         textAlign: 'center'
+    },
+    productCard: {
+        width: Display.width * 1 - 10,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 })

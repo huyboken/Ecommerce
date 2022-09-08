@@ -8,8 +8,10 @@ import HomeProduct from '../Components/Home/HomeProduct';
 const HomeScreen = () => {
     return (
         <View>
-            <Banner />
-            <HomeProduct />
+            <ScrollView>
+                <Banner />
+                <HomeProduct />
+            </ScrollView>
         </View>
     );
 };

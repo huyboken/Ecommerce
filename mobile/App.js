@@ -5,14 +5,19 @@ import { Colors, Fonts, Images } from './src/Constant'
 import HomeScreen from './src/Screen/HomeScreen'
 import { Provider } from 'react-redux'
 import Store from './src/Redux/Store'
+import { NavigationContainer } from '@react-navigation/native'
+import Main from './src/Navigations/Main'
 
 const App = () => {
   return (
     <Provider store={Store}>
-      <SafeAreaView style={styles.container}>
+      {/* <SafeAreaView style={styles.container}>
         <Header />
         <HomeScreen />
-      </SafeAreaView>
+      </SafeAreaView> */}
+      <NavigationContainer>
+        <Main />
+      </NavigationContainer>
     </Provider>
   )
 }

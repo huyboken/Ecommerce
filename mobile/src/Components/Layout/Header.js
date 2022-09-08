@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import Display from '../../Utils/Display';
 import { Colors } from '../../Constant';
@@ -17,7 +17,7 @@ const Header = () => {
                     style={styles.searchBox}
                 />
                 <TouchableOpacity >
-                    <Ionicons name="search-outline" size={20} style={styles.searchIcon} />
+                    <Ionicons name="search-outline" style={styles.searchIcon} />
                 </TouchableOpacity>
             </View>
         </View>
@@ -29,11 +29,12 @@ export default Header;
 const styles = StyleSheet.create({
     headerMain: {
         width: Display.width,
-        height: Display.width / 4 - 35,
+        height: Platform.isPad ? Display.width / 9 - 35 : Display.width / 4 - 35,
         backgroundColor: Colors.WHITE,
         elevation: 8,
         padding: 10,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginVertical: Platform.isPad && 10
     },
     headerFlex: {
         alignItems: 'center',
@@ -41,15 +42,16 @@ const styles = StyleSheet.create({
     },
     searchBox: {
         width: Display.width - 70,
-        height: Display.width / 7 - 15,
+        height: Platform.isPad ? Display.width / 15 - 15 : Display.width / 7 - 15,
         backgroundColor: Colors.LIGHT_GREY1,
         marginHorizontal: 10,
-        borderRadius: 25,
+        borderRadius: Platform.isPad ? 30 : 25,
         fontSize: 15,
-        paddingHorizontal: 10,
+        paddingHorizontal: 20,
         position: 'relative'
     },
     searchIcon: {
-        right: 45
+        right: Platform.isPad ? 55 : 45,
+        fontSize: 20
     }
 });

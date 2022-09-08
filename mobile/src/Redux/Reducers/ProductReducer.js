@@ -4,8 +4,8 @@ const initialState = {
     isAuthenticated: false,
 };
 
-export const ProductReducer = createReducer(initialState, {
-    allProductRequests: state => {
+export const ProductsReducer = createReducer(initialState, {
+    allProductRequest: state => {
         state.loading = true;
     },
     allProductSuccess: (state, action) => {

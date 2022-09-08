@@ -18,6 +18,7 @@ export default {
     CORAL: "#ff7f50",
     CORN_FLOWER_BLUE: "#6495ed",
     CORNSILK: "#fff8dc",
+    CRIMSON: "#dc143c",
     CYAN: "#00ffff",
     DARK_BLUE: "#00008b",
     DARK_CYAN: "#008b8b",
