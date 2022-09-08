@@ -4,11 +4,11 @@ import Display from '../../Utils/Display';
 import { Colors } from '../../Constant';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const Header = () => {
+const Header = ({ navigation }) => {
     return (
         <View style={styles.headerMain}>
             <View style={styles.headerFlex}>
-                <TouchableOpacity >
+                <TouchableOpacity onPress={() => navigation.openDrawer()}>
                     <Ionicons name="menu-outline" size={30} />
                 </TouchableOpacity>
                 <TextInput
