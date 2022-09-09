@@ -1,14 +1,21 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import Header from '../Components/Layout/Header'
+import { Colors } from '../Constant'
 
-const WishListScreen = () => {
+const WishListScreen = ({ navigation }) => {
     return (
-        <View>
-            <Text>WishListScreen</Text>
-        </View>
+        <SafeAreaView style={styles.container}>
+            <Header navigation={navigation} />
+        </SafeAreaView>
     )
 }
 
 export default WishListScreen
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: Colors.WHITE
+    }
+})
