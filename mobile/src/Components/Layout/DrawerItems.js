@@ -1,4 +1,4 @@
-import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { Image, Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { Colors, Images } from '../../Constant';
 import {
@@ -7,13 +7,20 @@ import {
 } from '@react-navigation/drawer';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useDispatch, useSelector } from 'react-redux';
+import { LogOutUser } from '../../Redux/Actions/UserAction';
 
 const DrawerItems = props => {
-    const logout = () => { };
+    const { user } = useSelector(state => state.user);
+    const dispatch = useDispatch();
+
+    const logout = () => {
+        dispatch(LogOutUser())
+    };
     return (
         <SafeAreaView style={styles.container}>
-            <Image source={Images.USER} style={styles.avatar} />
-            <Text style={styles.name}>Admin@gmail.com</Text>
+            <Image source={{ uri: user.avatar?.url }} style={styles.avatar} />
+            <Text style={styles.name}>{user.name}</Text>
             <DrawerContentScrollView {...props}>
                 <View style={{ paddingTop: 10 }}>
                     <DrawerItemList {...props} />
@@ -38,10 +45,13 @@ const styles = StyleSheet.create({
         margin: 0,
     },
     avatar: {
-        height: 60,
-        width: 60,
+        height: Platform.isPad ? 100 : 60,
+        width: Platform.isPad ? 100 : 60,
         borderRadius: 120,
         marginLeft: 10,
+        borderWidth: 1,
+        borderColor: '#FB578E',
+        marginVertical: 10
     },
     name: {
         fontSize: 16,

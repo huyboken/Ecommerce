@@ -1,21 +1,44 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
-import React from 'react';
+import {
+    StyleSheet,
+    Text,
+    View,
+    TextInput,
+    TouchableOpacity,
+} from 'react-native';
+import React, { useEffect, useState } from 'react';
 import Display from '../../Utils/Display';
 import { Colors } from '../../Constant';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../../Redux/Actions/UserAction';
 
 const Login = () => {
-    const navigation = useNavigation()
-    const openLogin = () => {
+    const navigation = useNavigation();
+    const dispatch = useDispatch();
+    const [loginEmail, setLoginEmail] = useState('');
+    const [loginPassword, setLoginPassword] = useState('');
 
-    }
-    const openForgot = () => {
+    const { loading, isAuthenticated, error } = useSelector((state) => state.user)
 
-    }
+    const loginSubmit = () => {
+        dispatch(loginUser(loginEmail, loginPassword));
+    };
+    const openForgot = () => { };
     const onpenSignUp = () => {
-        navigation.navigate("SignUp")
-    }
+        navigation.navigate('SignUp');
+    };
+
+    useEffect(() => {
+        if (error) {
+            alert(error)
+        }
+        if (isAuthenticated) {
+            alert("Login!")
+        }
+
+    }, [loading, isAuthenticated, error, alert])
+
     return (
         <View style={styles.container}>
             <View style={styles.loginHeader}>
@@ -31,6 +54,8 @@ const Login = () => {
                         style={styles.inputBox}
                         textContentType={'emailAddress'}
                         keyboardType={'email-address'}
+                        value={loginEmail}
+                        onChangeText={setLoginEmail}
                     />
                 </View>
                 <View style={styles.relative}>
@@ -41,9 +66,13 @@ const Login = () => {
                         style={styles.inputBox}
                         textContentType={'password'}
                         secureTextEntry={true}
+                        value={loginPassword}
+                        onChangeText={setLoginPassword}
                     />
-                    <Text onPress={openForgot} style={styles.textForgot}>Forgot password?</Text>
-                    <TouchableOpacity onPress={openLogin} style={styles.buttonLogin}>
+                    <Text onPress={openForgot} style={styles.textForgot}>
+                        Forgot password?
+                    </Text>
+                    <TouchableOpacity onPress={loginSubmit} style={styles.buttonLogin}>
                         <Text style={styles.textLogin}>Login</Text>
                     </TouchableOpacity>
                 </View>

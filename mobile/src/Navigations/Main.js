@@ -28,10 +28,11 @@ const Main = () => {
                     fontSize: 15,
                     marginVertical: 2,
                 },
+                drawerType: 'front'
             }}
             drawerContent={props => <DrawerItems {...props} />}>
             <Drawer.Screen
-                name="BottomTab"
+                name="Home"
                 component={BottomTab}
                 options={{
                     drawerIcon: ({ color }) => (

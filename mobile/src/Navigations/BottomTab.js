@@ -10,10 +10,13 @@ import {
     ProfileScreen,
     WishListScreen,
 } from '../Screen';
+import { useSelector } from 'react-redux';
 
 const Tab = createBottomTabNavigator();
 
 const BottomTab = () => {
+    const { user } = useSelector(state => state.user);
+
     return (
         <Tab.Navigator
             screenOptions={{
@@ -21,9 +24,9 @@ const BottomTab = () => {
                 tabBarShowLabel: false,
                 tabBarHideOnKeyboard: true,
             }}
-            initialRouteName="Home">
+            initialRouteName="Home2">
             <Tab.Screen
-                name="Home"
+                name="Home2"
                 component={HomeScreen}
                 options={({ route }) => ({
                     tabBarIcon: ({ focused }) => (
@@ -163,15 +166,32 @@ const BottomTab = () => {
                                 justifyContent: 'center',
                                 width: Display.width / 5,
                             }}>
-                            <Image
-                                source={Images.USER}
-                                style={{
-                                    width: 45,
-                                    height: 45,
-                                    marginTop: 5,
-                                    borderRadius: 100,
-                                }}
-                            />
+                            {
+                                user ?
+                                    <Image
+                                        source={{ uri: user.avatar?.url }}
+                                        style={{
+                                            width: 40,
+                                            height: 40,
+                                            // marginTop: 5,
+                                            borderRadius: 100,
+                                            borderWidth: 1,
+                                            borderColor: '#FB578E',
+                                        }}
+                                    />
+                                    :
+                                    <Image
+                                        source={Images.USER}
+                                        style={{
+                                            width: 40,
+                                            height: 40,
+                                            // marginTop: 5,
+                                            borderRadius: 100,
+                                            borderWidth: 1,
+                                            borderColor: '#FB578E',
+                                        }}
+                                    />
+                            }
                         </View>
                     ),
                 })}
@@ -183,13 +203,5 @@ const BottomTab = () => {
 export default BottomTab;
 
 const styles = StyleSheet.create({
-    // container: {
-    //     alignItems: 'center',
-    //     justifyContent: 'center',
-    //     width: Display.width / 5
-    // },
-    // icon: {
-    // },
-    // text: {
-    // }
+
 });
