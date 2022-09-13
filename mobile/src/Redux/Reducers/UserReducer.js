@@ -60,3 +60,17 @@ export const UserReducer = createReducer(initialState, {
             state.error = action.payload
     },
 })
+
+export const forgotPasswordReducer = createReducer(initialState, {
+    forgotPasswordRequest: (state) => {
+        state.loading = true
+    },
+    forgotPasswordSuccess: (state = { user: {} }, action) => {
+        state.loading = false,
+            state.message = action.payload
+    },
+    forgotPasswordFail: (state = { user: {} }, action) => {
+        state.loading = false,
+            state.error = action.payload
+    },
+})

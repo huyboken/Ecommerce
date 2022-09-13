@@ -17,20 +17,21 @@ export const loginUser = (email, password) => async dispatch => {
 };
 
 //Registration user
-export const registerUser = (name, email, password, avatar) => async dispatch => {
-    try {
-        dispatch({ type: "userCreateRequest" })
-        const config = { headers: { 'Content-Type': 'application/json' } };
-        const { data } = await axios.post(
-            `https://mern-nest-ecommerce.herokuapp.com/api/v2/registration`,
-            { name, email, password, avatar },
-            config,
-        )
-        dispatch({ type: "userCreateSuccess", payload: data.user })
-    } catch (error) {
-        dispatch({ type: 'userCreateFail', payload: error.response.data.message });
-    }
-}
+export const registerUser =
+    (name, email, password, avatar) => async dispatch => {
+        try {
+            dispatch({ type: 'userCreateRequest' });
+            const config = { headers: { 'Content-Type': 'application/json' } };
+            const { data } = await axios.post(
+                `https://mern-nest-ecommerce.herokuapp.com/api/v2/registration`,
+                { name, email, password, avatar },
+                config,
+            );
+            dispatch({ type: 'userCreateSuccess', payload: data.user });
+        } catch (error) {
+            dispatch({ type: 'userCreateFail', payload: error.response.data.message });
+        }
+    };
 
 //Load user
 export const loadUser = () => async dispatch => {
@@ -45,12 +46,28 @@ export const loadUser = () => async dispatch => {
     }
 };
 
+//Forgot password
+export const forgotPassword = email => async dispatch => {
+    try {
+        dispatch({ type: 'forgotPasswordRequest' });
+        const config = { headers: { 'Content-Type': 'application/json' } };
+        const { data } = await axios.post(
+            'https://mern-nest-ecommerce.herokuapp.com/api/v2/password/forgot',
+            { email },
+            config,
+        );
+        dispatch({ type: 'forgotPasswordSuccess', payload: data.message });
+    } catch (error) {
+        dispatch({ type: 'userLoadFailed', payload: error.response.data.message });
+    }
+};
+
 //Logout user
 export const logOutUser = () => async dispatch => {
     try {
-        await axios.get('https://mern-nest-ecommerce.herokuapp.com/api/v2/logout')
-        dispatch({ type: "userLogOutSuccess" })
+        await axios.get('https://mern-nest-ecommerce.herokuapp.com/api/v2/logout');
+        dispatch({ type: 'userLogOutSuccess' });
     } catch (error) {
-        dispatch({ type: "userLogOutFail", payload: error.response.data.message })
+        dispatch({ type: 'userLogOutFail', payload: error.response.data.message });
     }
-}
+};

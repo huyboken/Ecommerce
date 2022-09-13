@@ -9,4 +9,5 @@ export default {
     SHOP: require('../Assets/Images/BottomTab/shop.png'),
     USER: require('../Assets/Images/BottomTab/user.jpeg'),
     LOGO: require('../Assets/Images/Splash/logo.png'),
+    LOADER: require('../Assets/Images/Splash/loader.json'),
 }

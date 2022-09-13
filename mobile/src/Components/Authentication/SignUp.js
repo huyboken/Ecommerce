@@ -1,51 +1,61 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
+import {
+    StyleSheet,
+    Text,
+    View,
+    TextInput,
+    TouchableOpacity,
+    Image,
+} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Display from '../../Utils/Display';
 import { Colors, Images } from '../../Constant';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import ImagePicker from 'react-native-image-crop-picker';
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../../Redux/Actions/UserAction';
 
 const SignUp = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
+    const { loading, isAuthenticated, error } = useSelector(state => state.user);
 
-    const { loading, isAuthenticated, error } = useSelector(state => state.user)
-
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [avatar, setAvatar] = useState("https://mern-nest-ecommerce.herokuapp.com/profile.png");
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [avatar, setAvatar] = useState(
+        'https://mern-nest-ecommerce.herokuapp.com/profile.png',
+    );
 
     const uploadImage = () => {
         ImagePicker.openPicker({
             width: 300,
             height: 300,
-            cropping: true
+            cropping: true,
+            compressImageQuality: .8,
         }).then(image => {
-            setAvatar(image.path)
+            setAvatar(image.path);
         });
-    }
+    };
 
-
-    console.log(avatar)
+    console.log(avatar);
     const register = () => {
-        dispatch(registerUser(name, email, password, avatar))
-    }
+        dispatch(registerUser(name, email, password, avatar));
+    };
     const onpenSignUp = () => {
         navigation.goBack();
-    }
+    };
 
     useEffect(() => {
         if (error) {
-            alert(error)
+            alert(error);
+            dispatch({ type: "clearErrors" });
         }
         if (isAuthenticated) {
-            alert("User create done!")
+            alert('User create done!');
         }
-    }, [isAuthenticated, error, loading, alert])
+    }, [isAuthenticated, error, loading, alert]);
+
     return (
         <View style={styles.container}>
             <View style={styles.loginHeader}>
@@ -54,7 +64,11 @@ const SignUp = () => {
             </View>
             <View style={styles.loginBox}>
                 <View style={styles.relative}>
-                    <Ionicons name="person-circle-outline" size={25} style={styles.icon} />
+                    <Ionicons
+                        name="person-circle-outline"
+                        size={25}
+                        style={styles.icon}
+                    />
                     <TextInput
                         placeholder="Write your name..."
                         placeholderTextColor={Colors.BLACK}
@@ -189,14 +203,14 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 80,
-        resizeMode: "stretch",
+        resizeMode: 'stretch',
         borderWidth: 1,
-        borderColor: "#999"
+        borderColor: '#999',
     },
     photo: {
         marginTop: 10,
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     btnPhoto: {
         marginLeft: 10,
@@ -206,10 +220,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 10,
-        backgroundColor: Colors.SEA_GREEN
+        backgroundColor: Colors.SEA_GREEN,
     },
     textPhoto: {
         fontSize: 18,
-        color: Colors.WHITE
-    }
+        color: Colors.WHITE,
+    },
 });

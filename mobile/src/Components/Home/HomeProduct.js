@@ -1,15 +1,16 @@
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import Display from '../../Utils/Display'
 import ProductCard from './ProductCard'
 import { Colors } from '../../Constant'
+import Loader from '../Layout/Loader'
 
 const HomeProduct = ({ loading, products }) => {
-
+    console.log(loading)
     return (
         <View style={styles.container}>
             <Text style={styles.titleText}>Best Selling</Text>
-            {loading ? <ActivityIndicator color={Colors.BLACK} /> :
+            {loading ? <Loader /> :
                 <View style={styles.productCard}>
                     {products && products.map((item) => {
                         return (
@@ -18,7 +19,7 @@ const HomeProduct = ({ loading, products }) => {
                     })}
                 </View>
             }
-            {loading ? <ActivityIndicator color={Colors.BLACK} /> :
+            {loading ? <Loader /> :
                 <View style={styles.productCard}>
                     {products && products.map((item) => {
                         return (

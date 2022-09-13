@@ -24,7 +24,9 @@ const Login = () => {
     const loginSubmit = () => {
         dispatch(loginUser(loginEmail, loginPassword));
     };
-    const openForgot = () => { };
+    const openForgot = () => {
+        navigation.navigate('ForgotPassword');
+    };
     const onpenSignUp = () => {
         navigation.navigate('SignUp');
     };
