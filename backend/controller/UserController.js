@@ -8,31 +8,38 @@ const cloudinary = require("cloudinary");
 
 //Register user
 exports.createUser = catchAsyncErrors(async (req, res, next) => {
-    const { name, email, password, avatar } = req.body;
+    try {
+        const { name, email, password, avatar } = req.body;
 
-    let user = await User.findOne({ email });
+        let user = await User.findOne({ email });
 
-    if (user) {
-        return res
-            .status(400)
-            .json({ success: false, message: "User already exists" });
+        if (user) {
+            return res
+                .status(400)
+                .json({ success: false, message: "User already exists" });
+        }
+
+        const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+            folder: "Ecommerce/avatars"
+        });
+
+        user = await User.create({
+            name,
+            email,
+            password,
+            avatar: {
+                public_id: myCloud.public_id,
+                url: myCloud.secure_url,
+            },
+        });
+
+        sendToken(user, 201, res);
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
     }
-
-    const myCloud = await cloudinary.v2.uploader.upload(avatar, {
-        folder: "Ecommerce/avatars"
-    });
-
-    user = await User.create({
-        name,
-        email,
-        password,
-        avatar: {
-            public_id: myCloud.public_id,
-            url: myCloud.secure_url,
-        },
-    });
-
-    sendToken(user, 200, res);
 });
 
 //Login user

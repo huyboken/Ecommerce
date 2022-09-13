@@ -8,14 +8,18 @@ import {
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
-import { LogOutUser } from '../../Redux/Actions/UserAction';
+import { logOutUser } from '../../Redux/Actions/UserAction';
 
 const DrawerItems = props => {
-    const { user } = useSelector(state => state.user);
+    const { user, error } = useSelector(state => state.user);
     const dispatch = useDispatch();
 
     const logout = () => {
-        dispatch(LogOutUser())
+        dispatch(logOutUser())
+        if (error) {
+            alert(error)
+        }
+        alert("Logout success")
     };
     return (
         <SafeAreaView style={styles.container}>

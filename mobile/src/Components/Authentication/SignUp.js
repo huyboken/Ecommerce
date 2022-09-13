@@ -1,18 +1,51 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Display from '../../Utils/Display';
 import { Colors, Images } from '../../Constant';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import ImagePicker from 'react-native-image-crop-picker';
+import { useDispatch, useSelector } from "react-redux"
+import { registerUser } from '../../Redux/Actions/UserAction';
 
 const SignUp = () => {
-    const navigation = useNavigation()
-    const openLogin = () => {
+    const navigation = useNavigation();
+    const dispatch = useDispatch();
 
+    const { loading, isAuthenticated, error } = useSelector(state => state.user)
+
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [avatar, setAvatar] = useState("https://mern-nest-ecommerce.herokuapp.com/profile.png");
+
+    const uploadImage = () => {
+        ImagePicker.openPicker({
+            width: 300,
+            height: 300,
+            cropping: true
+        }).then(image => {
+            setAvatar(image.path)
+        });
+    }
+
+
+    console.log(avatar)
+    const register = () => {
+        dispatch(registerUser(name, email, password, avatar))
     }
     const onpenSignUp = () => {
         navigation.goBack();
     }
+
+    useEffect(() => {
+        if (error) {
+            alert(error)
+        }
+        if (isAuthenticated) {
+            alert("User create done!")
+        }
+    }, [isAuthenticated, error, loading, alert])
     return (
         <View style={styles.container}>
             <View style={styles.loginHeader}>
@@ -27,6 +60,7 @@ const SignUp = () => {
                         placeholderTextColor={Colors.BLACK}
                         style={styles.inputBox}
                         textContentType={'name'}
+                        onChangeText={setName}
                     />
                 </View>
                 <View style={styles.relative}>
@@ -37,6 +71,7 @@ const SignUp = () => {
                         style={styles.inputBox}
                         textContentType={'emailAddress'}
                         keyboardType={'email-address'}
+                        onChangeText={setEmail}
                     />
                 </View>
                 <View style={styles.relative}>
@@ -47,17 +82,18 @@ const SignUp = () => {
                         style={styles.inputBox}
                         textContentType={'password'}
                         secureTextEntry={true}
+                        onChangeText={setPassword}
                     />
                 </View>
             </View>
             <View style={styles.relative}>
                 <View style={styles.photo}>
-                    <Image source={Images.USER} style={styles.image} />
-                    <TouchableOpacity style={styles.btnPhoto}>
+                    <Image source={{ uri: avatar }} style={styles.image} />
+                    <TouchableOpacity onPress={uploadImage} style={styles.btnPhoto}>
                         <Text style={styles.textPhoto}>Choose Photo</Text>
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity onPress={openLogin} style={styles.buttonLogin}>
+                <TouchableOpacity onPress={register} style={styles.buttonLogin}>
                     <Text style={styles.textLogin}>Sign Up</Text>
                 </TouchableOpacity>
             </View>
