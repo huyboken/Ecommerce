@@ -6,7 +6,7 @@ import { Colors } from '../../Constant'
 import Loader from '../Layout/Loader'
 
 const HomeProduct = ({ loading, products }) => {
-    console.log(loading)
+
     return (
         <View style={styles.container}>
             <Text style={styles.titleText}>Best Selling</Text>

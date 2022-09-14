@@ -23,7 +23,6 @@ export default Loader
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // height: Display.height * 1,
         backgroundColor: Colors.WHITE,
         justifyContent: 'center',
         alignItems: 'center'

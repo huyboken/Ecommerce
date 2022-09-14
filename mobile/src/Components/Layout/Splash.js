@@ -33,8 +33,6 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     image: {
-        // width: Display.width * 1 - 150,
-        // height: 200,
         marginBottom: 20
     },
     loader: {

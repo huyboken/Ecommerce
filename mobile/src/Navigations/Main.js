@@ -12,6 +12,7 @@ import DrawerItems from '../Components/Layout/DrawerItems';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Colors } from '../Constant';
+import OrderScreen from '../Screen/OrderScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -68,6 +69,15 @@ const Main = () => {
                 options={{
                     drawerIcon: ({ color }) => (
                         <Ionicons name="cart-outline" size={25} color={color} />
+                    ),
+                }}
+            />
+            <Drawer.Screen
+                name="My Order"
+                component={OrderScreen}
+                options={{
+                    drawerIcon: ({ color }) => (
+                        <Ionicons name="reader-outline" size={25} color={color} />
                     ),
                 }}
             />
