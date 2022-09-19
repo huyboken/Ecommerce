@@ -3,10 +3,10 @@ import React from 'react'
 import Header from '../Components/Layout/Header'
 import { Colors } from '../Constant'
 
-const ProfileScreen = ({ navigation }) => {
+const ProfileScreen = () => {
     return (
         <SafeAreaView style={styles.container}>
-            <Header navigation={navigation} />
+            <Header />
         </SafeAreaView>
     )
 }

@@ -14,9 +14,8 @@ import Header from '../Components/Layout/Header';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProduct } from '../Redux/Actions/ProductAction';
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = () => {
     const dispatch = useDispatch();
-
     const { products, loading, error } = useSelector(state => state.products);
 
     useEffect(() => {
@@ -28,10 +27,10 @@ const HomeScreen = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
+            <Header />
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}>
-                <Header navigation={navigation} />
                 <Banner />
                 <HomeProduct products={products} loading={loading} />
             </ScrollView>

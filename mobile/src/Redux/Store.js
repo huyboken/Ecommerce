@@ -7,7 +7,12 @@ const Store = configureStore({
         products: ProductsReducer,
         user: UserReducer,
         forgotPassword: forgotPasswordReducer
-    }
+    },
+    middleware: getDefaultMiddleware =>
+        getDefaultMiddleware({
+            immutableCheck: false,
+            serializableCheck: false,
+        }),
 })
 
 export default Store

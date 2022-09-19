@@ -10,4 +10,5 @@ export default {
     USER: require('../Assets/Images/BottomTab/user.jpeg'),
     LOGO: require('../Assets/Images/Splash/logo.png'),
     LOADER: require('../Assets/Images/Splash/loader.json'),
+    NETWORK: require('../Assets/Images/Splash/network.json'),
 }

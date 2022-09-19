@@ -1,0 +1,1 @@
+export default URI = "https://mern-nest-ecommerce.herokuapp.com"

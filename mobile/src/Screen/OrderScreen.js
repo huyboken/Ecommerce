@@ -3,10 +3,10 @@ import React from 'react'
 import { Colors } from '../Constant'
 import Header from '../Components/Layout/Header'
 
-const OrderScreen = ({ navigation }) => {
+const OrderScreen = () => {
     return (
         <SafeAreaView style={styles.container}>
-            <Header navigation={navigation} />
+            <Header />
         </SafeAreaView>
     )
 }
