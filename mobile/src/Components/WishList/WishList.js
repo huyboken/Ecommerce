@@ -2,14 +2,16 @@ import { StyleSheet, Text, ToastAndroid, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import { addCart } from '../../Redux/Actions/ProductAction';
+import { addCart, getWishList } from '../../Redux/Actions/ProductAction';
 
 const WishList = () => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
-    const { wishlistData } = useSelector(state => state.wishList);
-    const { cartData } = useSelector(state => state.cart);
+    const data = useSelector(state => state.wishList);
+    const { cartData = [] } = useSelector(state => state.cart);
     const { user } = useSelector(state => state.user);
+
+    console.log("data:", data)
 
     const [itemId, setItemId] = useState('');
 
@@ -57,9 +59,13 @@ const WishList = () => {
         });
     }, [dispatch, cartData]);
 
+    useEffect(() => {
+        dispatch(getWishList())
+    }, [dispatch]);
+
     return (
         <View>
-            {wishlistData.length > 0 ? (
+            {/* {wishlistData.length > 0 ? (
                 <View>
                     {wishlistData.map((product, index) => (
                         <View style={{ flex: 1 }}>
@@ -67,7 +73,7 @@ const WishList = () => {
                         </View>
                     ))}
                 </View>
-            ) : null}
+            ) : null} */}
         </View>
     );
 };

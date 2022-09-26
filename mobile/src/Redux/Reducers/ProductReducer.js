@@ -38,12 +38,13 @@ export const wishListAddReducer = createReducer(initialState, {
 export const wishListDataReducer = createReducer(initialState, {
     getWishListRequest: state => {
         state.loading = true;
+        state.isAuthenticated = false
     },
     getWishListSuccess: (state, action) => {
-        (state.loading = false), (state.wishlistData = action.payload);
+        (state.loading = false), state.isAuthenticated = true, (state.wishlistData = action.payload);
     },
     getWishListFail: (state, action) => {
-        (state.loading = false), (state.error = action.payload);
+        (state.loading = false), (state.error = action.payload), state.isAuthenticated = false;
     },
 });
 
