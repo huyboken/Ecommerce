@@ -7,8 +7,8 @@ import { addCart } from '../../Redux/Actions/ProductAction';
 const WishList = () => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
-    const { wishlistData = [] } = useSelector(state => state.wishList);
-    const { cartData = [] } = useSelector(state => state.cart);
+    const { wishlistData } = useSelector(state => state.wishList);
+    const { cartData } = useSelector(state => state.cart);
     const { user } = useSelector(state => state.user);
 
     const [itemId, setItemId] = useState('');
