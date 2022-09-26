@@ -4,7 +4,7 @@ const initialState = {
     isAuthenticated: false
 }
 
-export const UserReducer = createReducer(initialState, {
+export const userReducer = createReducer(initialState, {
     userLoginRequest: state => {
         state.loading = true,
             state.isAuthenticated = false

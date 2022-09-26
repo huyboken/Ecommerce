@@ -1,12 +1,20 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { ProductsReducer } from "./Reducers/ProductReducer";
-import { forgotPasswordReducer, UserReducer } from "./Reducers/UserReducer";
+import { cartAddReducer, cartDataReducer, cartRemoveReducer, cartUpdateReducer, productsReducer, wishListAddReducer, wishListDataReducer, wishListRemoveReducer } from "./Reducers/ProductReducer";
+import { forgotPasswordReducer, userReducer } from "./Reducers/UserReducer";
 
 const Store = configureStore({
     reducer: {
-        products: ProductsReducer,
-        user: UserReducer,
-        forgotPassword: forgotPasswordReducer
+        products: productsReducer,
+        user: userReducer,
+        forgotPassword: forgotPasswordReducer,
+        wishList: wishListDataReducer,
+        wishtListAdd: wishListAddReducer,
+        wishListRemove: wishListRemoveReducer,
+        cart: cartDataReducer,
+        cartAdd: cartAddReducer,
+        cartRemove: cartRemoveReducer,
+        cartUpdate: cartUpdateReducer
+
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware({
