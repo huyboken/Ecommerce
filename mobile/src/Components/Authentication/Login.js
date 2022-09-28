@@ -12,14 +12,16 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../Redux/Actions/UserAction';
+import NotiModal from '../Modal/NotiModal';
 
 const Login = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const [loginEmail, setLoginEmail] = useState('');
     const [loginPassword, setLoginPassword] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
 
-    const { loading, isAuthenticated, error } = useSelector((state) => state.user)
+    const { loading, isAuthenticated, error } = useSelector(state => state.user);
 
     const loginSubmit = () => {
         dispatch(loginUser(loginEmail, loginPassword));
@@ -33,13 +35,12 @@ const Login = () => {
 
     useEffect(() => {
         if (error) {
-            alert(error)
+            setModalVisible(true);
         }
         if (isAuthenticated) {
-            alert("Login!")
+            alert('Login!');
         }
-
-    }, [loading, isAuthenticated, error, alert])
+    }, [loading, isAuthenticated, error, alert]);
 
     return (
         <View style={styles.container}>
@@ -85,6 +86,13 @@ const Login = () => {
                     <Text style={styles.textSignUp}>Sign Up</Text>
                 </TouchableOpacity>
             </View>
+            <NotiModal
+                title={'Notification'}
+                content={error}
+                modalVisible={modalVisible}
+                setModalVisible={setModalVisible}
+                autoOff={true}
+            />
         </View>
     );
 };

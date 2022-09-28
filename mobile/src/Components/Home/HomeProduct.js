@@ -5,7 +5,7 @@ import ProductCard from './ProductCard'
 import { Colors } from '../../Constant'
 import Loader from '../Layout/Loader'
 
-const HomeProduct = ({ loading, products }) => {
+const HomeProduct = ({ loading, products, wishlistData }) => {
 
     return (
         <View style={styles.container}>
@@ -14,20 +14,20 @@ const HomeProduct = ({ loading, products }) => {
                 <View style={styles.productCard}>
                     {products && products.map((item) => {
                         return (
-                            <ProductCard key={item._id} product={item} />
+                            <ProductCard key={item._id} product={item} wishlistData={wishlistData} />
                         )
                     })}
                 </View>
             }
-            {loading ? <Loader /> :
+            {/* {loading ? <Loader /> :
                 <View style={styles.productCard}>
                     {products && products.map((item) => {
                         return (
-                            <ProductCard key={item._id} product={item} />
+                            <ProductCard key={item._id} product={item} wishlistData={wishlistData} />
                         )
                     })}
                 </View>
-            }
+            } */}
         </View>
     )
 }

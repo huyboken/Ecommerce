@@ -50,7 +50,7 @@ export const addToWishList =
         };
 
 //Remove to wishlist
-export default removeToWishList = id => async dispatch => {
+export const removeToWishList = id => async dispatch => {
     try {
         dispatch({ type: 'removeWishListRequest' });
         const { data } = await axios.delete(`${URI}/api/v2/removeWishlist/${id}`);

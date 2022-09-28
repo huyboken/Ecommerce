@@ -1,5 +1,5 @@
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Images } from '../Constant';
@@ -11,16 +11,37 @@ import {
     ProfileScreen,
     WishListScreen,
 } from '../Screen';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../Components/Layout/Loader';
 import HomeProduct from '../Components/Home/HomeProduct';
 import ProductDetails from '../Components/Products/ProductDetails';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import { getCart, getWishList } from '../Redux/Actions/ProductAction';
+import OrderScreen from '../Screen/OrderScreen';
 
 const Tab = createBottomTabNavigator();
 
 const BottomTab = () => {
+    const dispatch = useDispatch();
     const { user, loading } = useSelector(state => state.user);
+    const { wishlistData, error } = useSelector(state => state.wishList);
+    const { cartData } = useSelector(state => state.cart);
+
+    useEffect(() => {
+        if (error) {
+            alert(error);
+        }
+        dispatch(getCart());
+        dispatch(getWishList());
+    }, [dispatch, error]);
+
+    // useEffect(() => {
+    //     if (error) {
+    //         alert(error);
+    //     }
+    //     dispatch(getCart());
+    //     dispatch(getWishList());
+    // }, [dispatch, error, wishlistData]);
 
     return (
         <>
@@ -104,7 +125,7 @@ const BottomTab = () => {
                             name="WishList"
                             component={WishListScreen}
                             options={({ route }) => ({
-                                tabBarBadge: 9,
+                                tabBarBadge: wishlistData?.length,
                                 tabBarIcon: ({ focused }) => (
                                     <View
                                         style={{
@@ -137,7 +158,7 @@ const BottomTab = () => {
                             name="Cart"
                             component={CartScreen}
                             options={({ route }) => ({
-                                tabBarBadge: 1,
+                                tabBarBadge: cartData?.length,
                                 tabBarIcon: ({ focused }) => (
                                     <View
                                         style={{
@@ -221,6 +242,7 @@ const SimpleScreen = () => {
             initialRouteName="Home">
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="ProductDetails" component={ProductDetails} />
+            <Stack.Screen name="OrderScreen" component={OrderScreen} />
         </Stack.Navigator>
     );
 };
@@ -228,6 +250,7 @@ const SimpleScreen = () => {
 const Visibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed';
     if (routeName === 'ProductDetails') return 'none';
+    if (routeName === 'OrderScreen') return 'none';
     return 'flex';
 };
 

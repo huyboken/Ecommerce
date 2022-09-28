@@ -17,6 +17,7 @@ import { getProduct } from '../Redux/Actions/ProductAction';
 const HomeScreen = () => {
     const dispatch = useDispatch();
     const { products, loading, error } = useSelector(state => state.products);
+    const { wishlistData } = useSelector(state => state.wishList);
 
     useEffect(() => {
         if (error) {
@@ -32,7 +33,7 @@ const HomeScreen = () => {
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}>
                 <Banner />
-                <HomeProduct products={products} loading={loading} />
+                <HomeProduct products={products} loading={loading} wishlistData={wishlistData} />
             </ScrollView>
         </SafeAreaView>
     );
