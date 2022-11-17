@@ -1,28 +1,30 @@
 import {
+    Dimensions,
     Image,
     StyleSheet,
     Text,
-    ToastAndroid,
     TouchableOpacity,
     View,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
-import { addCart } from '../../Redux/Actions/ProductAction';
-import Display from '../../Utils/Display';
-import { Colors } from '../../Constant';
+import { addCart, getCart } from '../../Redux/Actions/ProductAction';
+import { useState } from 'react';
 
-const WishList = () => {
-    const dispatch = useDispatch();
-    const navigation = useNavigation();
+var { width } = Dimensions.get('window');
+var height = Dimensions.get('window').height;
+
+export default function WishList() {
     const { wishlistData } = useSelector(state => state.wishList);
     const { cartData } = useSelector(state => state.cart);
+
     const { user } = useSelector(state => state.user);
 
     const [itemId, setItemId] = useState('');
 
-    //Add to cart
+    const dispatch = useDispatch();
+
+    // add to cart
     const addToCartHandler = async (
         productName,
         productImage,
@@ -33,11 +35,9 @@ const WishList = () => {
     ) => {
         let quantity = 1;
         if (Stock === 0 || productId === itemId) {
-            alert(
-                productId === itemId
-                    ? `${productName} already have in cart`
-                    : `${productName} out of stock`,
-            );
+            alert(productId === itemId
+                ? `${productName} already have in cart`
+                : `${productName} out of stock`)
         } else {
             await dispatch(
                 addCart(
@@ -50,37 +50,39 @@ const WishList = () => {
                     Stock,
                 ),
             );
-            alert(`${productName} added to cart`);
+            alert(`${productName} added to cart`)
         }
     };
 
     useEffect(() => {
-        cartData?.map(item => {
+        cartData.map(item => {
             setItemId(item.productId);
         });
     }, [dispatch, cartData]);
 
     return (
-        <>
-            {wishlistData?.length > 0 ? (
+        <View>
+            {wishlistData.length > 0 ? (
                 <View>
                     {wishlistData.map((product, index) => (
                         <View
                             style={{
+                                width: width * 1,
                                 flexDirection: 'row',
                                 alignItems: 'center',
-                                padding: Display.width * 0.05,
+                                paddingHorizontal: width * 0.05,
+                                paddingVertical: width * 0.05,
                             }}
                             key={index}>
                             <Image
-                                style={{ width: 60, height: 60 }}
                                 source={{ uri: product.productImage }}
+                                style={{ width: 60, height: 60 }}
                             />
                             <View
                                 style={{
-                                    justifyContent: 'flex-start',
                                     flexDirection: 'column',
-                                    width: Display.width / 3.3,
+                                    justifyContent: 'flex-start',
+                                    width: width / 3.3,
                                 }}>
                                 <Text style={styles.productName}>{product.productName}</Text>
                             </View>
@@ -91,13 +93,14 @@ const WishList = () => {
                             </View>
                             <TouchableOpacity
                                 style={{
+                                    width: 110,
+                                    height: width * 0.1,
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     backgroundColor: '#000',
-                                    marginLeft: Display.width * 0.04,
+                                    marginLeft: width * 0.04,
                                     borderRadius: 5,
-                                    marginRight: Display.width * 0.05,
-                                    padding: 5
+                                    marginRight: width * 0.05,
                                 }}
                                 onPress={() =>
                                     addToCartHandler(
@@ -115,29 +118,31 @@ const WishList = () => {
                     ))}
                 </View>
             ) : (
-                <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-                    <Text
-                        style={{ color: Colors.BLACK, textAlign: 'center', fontSize: 20 }}>
+                <View
+                    style={{
+                        height: height * 1,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
+                    <Text style={{ color: '#333', fontSize: 20, textAlign: 'center' }}>
                         Your wishList is empty 😢
                     </Text>
                 </View>
             )}
-        </>
+        </View>
     );
-};
-
-export default WishList;
+}
 
 const styles = StyleSheet.create({
     productName: {
-        color: Colors.BLACK,
         fontSize: 20,
+        color: '#333',
         paddingHorizontal: 5,
         marginBottom: 5,
     },
     productPrice: {
-        color: Colors.BLACK,
         fontSize: 22,
+        color: '#333',
         fontWeight: '700',
     },
 });

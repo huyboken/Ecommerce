@@ -1,67 +1,88 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import Display from '../../Utils/Display'
-import { Colors, Fonts } from '../../Constant'
-import { useDispatch, useSelector } from 'react-redux'
-import { forgotPassword } from '../../Redux/Actions/UserAction'
+import {
+    StyleSheet,
+    TextInput,
+    View,
+    Text,
+    TouchableOpacity,
+} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { forgotPassword } from '../../Redux/Actions/UserAction';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import Display from '../../Utils/Display';
 
-const ForgotPassword = () => {
+export default function ForgotPassword() {
+    const { loading, error, message } = useSelector(state => state.forgotPassword);
+    const dispatch = useDispatch();
     const [email, setEmail] = useState("");
-    const dispatch = useDispatch()
-    const { message, error } = useSelector(state => state.forgotPassword);
+    const navigation = useNavigation();
 
-    const submit = () => {
-        dispatch(forgotPassword(email))
-    }
-
+    const forGotPassword = () => {
+        dispatch(forgotPassword(email));
+    };
     useEffect(() => {
         if (error) {
-            alert(error)
+            alert(error);
         }
         if (message) {
-            alert(message)
+            alert(message);
         }
-    }, [alert, message, error])
+    }, [alert, error, message]);
 
     return (
         <>
-            <TextInput
-                placeholder='Write your email...'
-                placeholderTextColor={Colors.BLACK}
-                style={styles.forgot}
-                value={email}
-                onChangeText={setEmail}
-            />
-            <TouchableOpacity onPress={submit} style={styles.button}>
-                <Text style={styles.text}>Submit</Text>
-            </TouchableOpacity>
+            {loading ? (
+                <Text>Loading</Text>
+            ) : (
+                <View style={styles.container}>
+                    <TextInput
+                        placeholder="Write your email..."
+                        placeholderTextColor="#333"
+                        style={styles.forgot}
+                        value={email}
+                        onChangeText={setEmail}
+                    />
+                    <TouchableOpacity onPress={forGotPassword} style={styles.button}>
+                        <View>
+                            <Text
+                                style={{
+                                    color: '#fff',
+                                    fontSize: 20,
+                                    fontWeight: '600',
+                                }}>
+                                Submit
+                            </Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            )}
         </>
-    )
+    );
 }
 
-export default ForgotPassword
-
 const styles = StyleSheet.create({
+    container: {
+        width: Display.width * 1,
+        height: Display.width * 2,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     forgot: {
         width: Display.width * 1 - 80,
-        borderColor: "#FB578E",
+        height: 50,
+        borderColor: '#3BB77E',
         borderWidth: 1,
+        color: '#333',
         borderRadius: 10,
-        paddingVertical: 15,
-        paddingHorizontal: 20,
-        color: Colors.BLACK,
+        paddingLeft: 15,
     },
     button: {
-        width: Display.width * 1 - 80,
+        width: '80%',
         height: 50,
         borderRadius: 10,
-        backgroundColor: "#FB578E",
-        marginTop: 50,
+        backgroundColor: '#3BB77E',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginTop: 50,
     },
-    text: {
-        fontSize: 20,
-        color: Colors.WHITE,
-    }
-})
+});

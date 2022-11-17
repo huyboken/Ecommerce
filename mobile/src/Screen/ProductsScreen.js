@@ -3,12 +3,15 @@ import React from 'react'
 import { Colors } from '../Constant'
 import Header from '../Components/Layout/Header'
 import FilterProducts from '../Components/Products/FilterProducts'
+import { ScrollView } from 'react-native-gesture-handler'
 
 const ProductsScreen = () => {
     return (
         <SafeAreaView style={styles.container}>
-            <Header />
-            <FilterProducts />
+            <ScrollView>
+                <Header />
+                <FilterProducts />
+            </ScrollView>
         </SafeAreaView>
     )
 }

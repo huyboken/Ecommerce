@@ -1,47 +1,33 @@
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import React, { useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Images } from '../Constant';
-import Display from '../Utils/Display';
-import {
-    CartScreen,
-    HomeScreen,
-    ProductsScreen,
-    ProfileScreen,
-    WishListScreen,
-} from '../Screen';
-import { useDispatch, useSelector } from 'react-redux';
-import Loader from '../Components/Layout/Loader';
-import HomeProduct from '../Components/Home/HomeProduct';
-import ProductDetails from '../Components/Products/ProductDetails';
+import React from 'react';
+import { View, Image, Text } from 'react-native';
+import { useSelector } from 'react-redux';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { getCart, getWishList } from '../Redux/Actions/ProductAction';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import Loader from '../Components/Layout/Loader';
+import { CartScreen, HomeScreen, ProductsScreen, ProfileScreen, WishListScreen } from '../Screen';
+import ProductDetails from '../Components/Products/ProductDetails';
 import OrderScreen from '../Screen/OrderScreen';
+import UpdateAccount from '../Components/Profile/UpdateAccount';
 
 const Tab = createBottomTabNavigator();
 
-const BottomTab = () => {
-    const dispatch = useDispatch();
+export default function BottomTab() {
     const { user, loading } = useSelector(state => state.user);
     const { wishlistData, error } = useSelector(state => state.wishList);
     const { cartData } = useSelector(state => state.cart);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (error) {
             alert(error);
         }
-        dispatch(getCart());
         dispatch(getWishList());
-    }, [dispatch, error]);
-
-    // useEffect(() => {
-    //     if (error) {
-    //         alert(error);
-    //     }
-    //     dispatch(getCart());
-    //     dispatch(getWishList());
-    // }, [dispatch, error, wishlistData]);
+        dispatch(getCart());
+    }, [dispatch, error, wishlistData]);
 
     return (
         <>
@@ -64,25 +50,21 @@ const BottomTab = () => {
                                 tabBarIcon: ({ focused }) => (
                                     <View
                                         style={{
+                                            flexDirection: 'column',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            width: Display.width / 5,
                                         }}>
                                         <Image
-                                            source={Images.HOME}
+                                            source={require('../Assets/Images/BottomTab/home.png')}
                                             style={{
                                                 width: 25,
                                                 height: 25,
-                                                marginTop: 5,
                                                 resizeMode: 'contain',
+                                                marginTop: 5,
                                                 tintColor: focused ? 'crimson' : 'black',
                                             }}
                                         />
-                                        <Text
-                                            style={{
-                                                color: focused ? 'crimson' : 'black',
-                                                textAlign: 'center',
-                                            }}>
+                                        <Text style={{ color: focused ? 'crimson' : 'black' }}>
                                             Home
                                         </Text>
                                     </View>
@@ -90,170 +72,159 @@ const BottomTab = () => {
                             })}
                         />
                         <Tab.Screen
-                            name="Products"
+                            name="ProductsTab"
                             component={ProductsScreen}
-                            options={({ route }) => ({
+                            options={{
                                 tabBarIcon: ({ focused }) => (
                                     <View
                                         style={{
+                                            flexDirection: 'column',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            width: Display.width / 5,
                                         }}>
                                         <Image
-                                            source={Images.SHOP}
+                                            source={require('../Assets/Images/BottomTab/shop.png')}
                                             style={{
                                                 width: 25,
                                                 height: 25,
-                                                marginTop: 5,
                                                 resizeMode: 'contain',
+                                                marginTop: 5,
                                                 tintColor: focused ? 'crimson' : 'black',
                                             }}
                                         />
-                                        <Text
-                                            style={{
-                                                color: focused ? 'crimson' : 'black',
-                                                textAlign: 'center',
-                                            }}>
+                                        <Text style={{ color: focused ? 'crimson' : 'black' }}>
                                             Products
                                         </Text>
                                     </View>
                                 ),
-                            })}
+                            }}
                         />
                         <Tab.Screen
-                            name="WishList"
+                            name="wishlist"
                             component={WishListScreen}
-                            options={({ route }) => ({
+                            options={{
                                 tabBarBadge: wishlistData?.length,
                                 tabBarIcon: ({ focused }) => (
                                     <View
                                         style={{
+                                            flexDirection: 'column',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            width: Display.width / 5,
                                         }}>
                                         <Image
-                                            source={Images.HEART}
+                                            source={require('../Assets/Images/BottomTab/heart.png')}
                                             style={{
                                                 width: 25,
                                                 height: 25,
-                                                marginTop: 5,
                                                 resizeMode: 'contain',
+                                                marginTop: 5,
                                                 tintColor: focused ? 'crimson' : 'black',
                                             }}
                                         />
-                                        <Text
-                                            style={{
-                                                color: focused ? 'crimson' : 'black',
-                                                textAlign: 'center',
-                                            }}>
+                                        <Text style={{ color: focused ? 'crimson' : 'black' }}>
                                             WishList
                                         </Text>
                                     </View>
                                 ),
-                            })}
+                            }}
                         />
                         <Tab.Screen
-                            name="Cart"
+                            name="cart"
                             component={CartScreen}
-                            options={({ route }) => ({
+                            options={{
                                 tabBarBadge: cartData?.length,
                                 tabBarIcon: ({ focused }) => (
                                     <View
                                         style={{
+                                            flexDirection: 'column',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            width: Display.width / 5,
                                         }}>
                                         <Image
-                                            source={Images.CART}
+                                            source={require('../Assets/Images/BottomTab/cart.png')}
                                             style={{
                                                 width: 25,
                                                 height: 25,
-                                                marginTop: 5,
                                                 resizeMode: 'contain',
+                                                marginTop: 5,
                                                 tintColor: focused ? 'crimson' : 'black',
                                             }}
                                         />
-                                        <Text
-                                            style={{
-                                                color: focused ? 'crimson' : 'black',
-                                                textAlign: 'center',
-                                            }}>
+                                        <Text style={{ color: focused ? 'crimson' : 'black' }}>
                                             Cart
                                         </Text>
                                     </View>
                                 ),
-                            })}
+                            }}
                         />
                         <Tab.Screen
-                            name="Profile"
+                            name="profile"
                             component={ProfileScreen}
-                            options={({ route }) => ({
+                            options={{
                                 tabBarIcon: ({ focused }) => (
                                     <View
                                         style={{
+                                            flexDirection: 'column',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            width: Display.width / 5,
                                         }}>
-                                        {user ? (
-                                            <Image
-                                                source={{ uri: user.avatar?.url }}
-                                                style={{
-                                                    width: 40,
-                                                    height: 40,
-                                                    // marginTop: 5,
-                                                    borderRadius: 100,
-                                                    borderWidth: 1,
-                                                    borderColor: '#FB578E',
-                                                }}
-                                            />
-                                        ) : (
-                                            <Image
-                                                source={Images.USER}
-                                                style={{
-                                                    width: 40,
-                                                    height: 40,
-                                                    // marginTop: 5,
-                                                    borderRadius: 100,
-                                                    borderWidth: 1,
-                                                    borderColor: '#FB578E',
-                                                }}
-                                            />
-                                        )}
+                                        <Image
+                                            source={{
+                                                uri: user.avatar.url,
+                                            }}
+                                            style={{
+                                                width: 35,
+                                                height: 35,
+                                                borderRadius: 70,
+                                                marginTop: 5,
+                                            }}
+                                        />
+                                        {/* <Text style={{color: focused ? 'crimson' : 'black'}}>
+                 Shahriar
+               </Text> */}
                                     </View>
                                 ),
-                            })}
+                            }}
                         />
                     </Tab.Navigator>
                 </>
             )}
         </>
     );
-};
+}
 
 const SimpleScreen = () => {
     const Stack = createNativeStackNavigator();
     return (
         <Stack.Navigator
-            screenOptions={{ headerShown: false }}
+            screenOptions={{
+                headerShown: false,
+            }}
             initialRouteName="Home">
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="ProductDetails" component={ProductDetails} />
             <Stack.Screen name="OrderScreen" component={OrderScreen} />
+            <Stack.Screen name="UpdateProfile" component={UpdateAccount} />
         </Stack.Navigator>
     );
 };
 
 const Visibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed';
-    if (routeName === 'ProductDetails') return 'none';
-    if (routeName === 'OrderScreen') return 'none';
-    return 'flex';
+
+    if (routeName === 'ProductDetails') {
+        return 'none';
+    }
+
+    if (routeName === 'OrderScreen') {
+        return 'none';
+    }
+
+    if (routeName === 'UpdateProfile') {
+        return 'none';
+    }
+
+    if (routeName === 'Home') {
+        return 'flex';
+    }
 };
-
-export default BottomTab;
-
-const styles = StyleSheet.create({});

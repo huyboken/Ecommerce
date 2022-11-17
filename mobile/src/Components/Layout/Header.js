@@ -1,25 +1,28 @@
 import {
-    Image,
-    Platform,
-    ScrollView,
     StyleSheet,
     Text,
-    TextInput,
-    TouchableOpacity,
     View,
+    Dimensions,
+    TouchableOpacity,
+    TextInput,
+    ScrollView,
+    Image,
 } from 'react-native';
-import React, { useState } from 'react';
-import Display from '../../Utils/Display';
-import { Colors } from '../../Constant';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native';
+import React, { useRef } from 'react';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+
+var { width } = Dimensions.get('window');
+var height = Dimensions.get('window').height;
 
 const Header = () => {
-    const navigation = useNavigation();
     const { products } = useSelector(state => state.products);
-    const [data, setData] = useState(products);
+    const [data, setdata] = useState(products);
     const [search, setSearch] = useState('');
+
+    const navigation = useNavigation();
 
     const searchHandler = text => {
         if (text) {
@@ -32,16 +35,12 @@ const Header = () => {
                     const textData = text.toUpperCase();
                     return iteamData.indexOf(textData) > -1;
                 });
-            setData(newData);
+            setdata(newData);
             setSearch(text);
         } else {
-            setData(products);
+            setdata(products);
             setSearch(text);
         }
-    };
-
-    const openProductDetails = item => () => {
-        navigation.navigate('ProductDetails', item);
     };
 
     return (
@@ -49,17 +48,22 @@ const Header = () => {
             <View style={styles.headerMain}>
                 <View style={styles.headerFlex}>
                     <TouchableOpacity onPress={() => navigation.openDrawer()}>
-                        <Ionicons name="menu-outline" size={30} />
+                        <Icon name="menu-outline" size={40} color="#333" />
                     </TouchableOpacity>
                     <TextInput
-                        placeholderTextColor={'#333'}
-                        placeholder={'Search...'}
+                        placeholder="Search..."
+                        placeholderTextColor="#333"
                         style={styles.searchBox}
                         value={search}
                         onChangeText={text => searchHandler(text)}
                     />
                     <TouchableOpacity>
-                        <Ionicons name="search-outline" style={styles.searchIcon} />
+                        <Icon
+                            name="search-outline"
+                            size={30}
+                            color="#333"
+                            style={styles.searchIcon}
+                        />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -70,51 +74,47 @@ const Header = () => {
                             position: 'absolute',
                             width: '100%',
                             left: 0,
-                            top: Platform.isPad
-                                ? Display.height / 9 - 30
-                                : Platform.OS === 'ios'
-                                    ? Display.height / 6 - 30
-                                    : Display.height / 8 - 40,
+                            top: height / 8 - 40,
                             zIndex: 100,
-                            height: Display.height * 1,
+                            height: height * 1,
                             backgroundColor: 'rgba(61, 107, 115, 0.80)',
                             paddingVertical: 10,
                         }}>
-                        {Array.isArray(data) &&
-                            data.map((item, index) => (
-                                <TouchableOpacity
-                                    onPress={openProductDetails(item)}
-                                    key={index}>
-                                    <View
+                        {Array.isArray(data) && data.map((i, index) => (
+                            <TouchableOpacity
+                                onPress={() => navigation.navigate('ProductDetails', { item: i })}
+                                key={index}>
+                                <View
+                                    style={{
+                                        marginVertical: 15,
+                                        marginHorizontal: 15,
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                    }}>
+                                    <Image
+                                        source={{ uri: i.images[0].url }}
+                                        style={{ height: 40, width: 40 }}
+                                    />
+                                    <Text
                                         style={{
-                                            margin: 15,
-                                            flexDirection: 'row',
-                                            alignItems: 'center',
+                                            color: '#fff',
+                                            paddingLeft: 20,
+                                            fontWeight: '700',
                                         }}>
-                                        <Image
-                                            source={{ uri: item.images[0].url }}
-                                            style={{ width: 40, height: 40 }}
-                                        />
-                                        <Text
-                                            style={{
-                                                color: Colors.WHITE,
-                                                fontWeight: '700',
-                                                paddingLeft: 20,
-                                            }}>
-                                            {item.name}
-                                        </Text>
-                                        <Ionicons
-                                            name="star"
-                                            color={Colors.GOLDEN_ROD}
-                                            size={18}
-                                            style={{ paddingLeft: 20 }}
-                                        />
-                                        <Text style={{ color: Colors.WHITE, paddingLeft: 5 }}>
-                                            ({item.numOfReviews})
-                                        </Text>
-                                    </View>
-                                </TouchableOpacity>
-                            ))}
+                                        {i.name}
+                                    </Text>
+                                    <Icon
+                                        name="star"
+                                        color="#fff"
+                                        size={18}
+                                        style={{ marginLeft: 20 }}
+                                    />
+                                    <Text style={{ color: '#fff', paddingLeft: 5 }}>
+                                        ({i.numOfReviews})
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                        ))}
                     </ScrollView>
                 </>
             ) : null}
@@ -126,31 +126,31 @@ export default Header;
 
 const styles = StyleSheet.create({
     headerMain: {
-        width: Display.width,
-        height: Platform.isPad ? Display.width / 9 - 35 : Display.width / 4 - 35,
-        backgroundColor: Colors.WHITE,
+        width: width,
+        height: width / 4 - 35,
+        backgroundColor: '#fff',
         elevation: 8,
-        padding: 10,
-        justifyContent: 'center',
-        marginVertical: Platform.isPad && 10,
+        paddingVertical: 10,
+        paddingHorizontal: 10,
     },
     headerFlex: {
-        alignItems: 'center',
         flexDirection: 'row',
+        alignItems: 'center',
     },
     searchBox: {
-        width: Display.width - 70,
-        height: Platform.isPad ? Display.width / 15 - 15 : Display.width / 7 - 15,
-        backgroundColor: Colors.LIGHT_GREY1,
+        width: width - 80,
+        height: width / 7 - 15,
+        backgroundColor: '#e5e5e5',
         marginHorizontal: 10,
-        borderRadius: Platform.isPad ? 30 : 25,
+        borderRadius: 25,
         fontSize: 15,
-        paddingLeft: 20,
-        paddingRight: 40,
+        color: '#333',
+        paddingHorizontal: 10,
         position: 'relative',
     },
     searchIcon: {
-        right: Platform.isPad ? 55 : 45,
-        fontSize: 20,
+        position: 'absolute',
+        bottom: -15,
+        right: 15,
     },
 });

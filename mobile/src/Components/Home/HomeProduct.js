@@ -1,56 +1,46 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import Display from '../../Utils/Display'
-import ProductCard from './ProductCard'
-import { Colors } from '../../Constant'
-import Loader from '../Layout/Loader'
+import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import React from 'react';
+var { width } = Dimensions.get('window');
+import ProductCard from '../Home/ProductCard';
 
-const HomeProduct = ({ loading, products, wishlistData }) => {
-
+export default function HomeProduct({ products, wishlistData }) {
     return (
         <View style={styles.container}>
-            <Text style={styles.titleText}>Best Selling</Text>
-            {loading ? <Loader /> :
-                <View style={styles.productCard}>
-                    {products && products.map((item) => {
-                        return (
-                            <ProductCard key={item._id} product={item} wishlistData={wishlistData} />
-                        )
-                    })}
-                </View>
-            }
-            {/* {loading ? <Loader /> :
-                <View style={styles.productCard}>
-                    {products && products.map((item) => {
-                        return (
-                            <ProductCard key={item._id} product={item} wishlistData={wishlistData} />
-                        )
-                    })}
-                </View>
-            } */}
+            <Text
+                style={{
+                    fontSize: 25,
+                    color: '#333',
+                    textAlign: 'center',
+                }}
+            >
+                Best Selling
+            </Text>
+            <View style={styles.productCard}>
+                {products &&
+                    products.map(product => (
+                        <ProductCard
+                            key={product._id}
+                            product={product}
+                            wishlistData={wishlistData}
+                        />
+                    ))}
+            </View>
         </View>
-    )
+    );
 }
-
-export default HomeProduct
 
 const styles = StyleSheet.create({
     container: {
-        width: Display.width,
+        width: width,
         padding: 10,
         marginVertical: 10,
-        marginBottom: Display.width / 6 - 5
-    },
-    titleText: {
-        fontSize: 20,
-        color: "#333",
-        textAlign: 'center'
+        marginBottom: width / 6 - 5,
     },
     productCard: {
-        width: Display.width * 1 - 10,
+        width: width * 1 - 10,
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'center',
-        alignItems: 'center'
-    }
-})
+        alignItems: 'center',
+    },
+});

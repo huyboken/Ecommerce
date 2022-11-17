@@ -1,99 +1,103 @@
-import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { Image } from 'react-native';
 import BottomTab from './BottomTab';
-import {
-    CartScreen,
-    ProductsScreen,
-    ProfileScreen,
-    WishListScreen,
-} from '../Screen';
+import { CartScreen, OrderScreen, ProductsScreen, ProfileScreen, WishListScreen } from '../Screen';
 import DrawerItems from '../Components/Layout/DrawerItems';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Colors } from '../Constant';
-import OrderScreen from '../Screen/OrderScreen';
-
-const Drawer = createDrawerNavigator();
 
 const Main = () => {
+    const Drawer = createDrawerNavigator();
     return (
-        <Drawer.Navigator
-            initialRouteName="BottomTab"
-            screenOptions={{
-                headerShown: false,
-                drawerActiveBackgroundColor: Colors.LIGHT_GREEN,
-                drawerActiveTintColor: Colors.WHITE,
-                drawerLabelStyle: {
-                    marginLeft: -25,
-                    fontSize: 15,
-                    marginVertical: 2,
-                },
-                drawerType: 'front'
-            }}
-            drawerContent={props => <DrawerItems {...props} />}>
-            <Drawer.Screen
-                name="Home"
-                component={BottomTab}
-                options={{
-                    drawerIcon: ({ color }) => (
-                        <Ionicons name="home-outline" size={25} color={color} />
-                    ),
+        <>
+            <Drawer.Navigator
+                initialRouteName="Home"
+                screenOptions={{
+                    headerShown: false,
+                    drawerActiveBackgroundColor: '#3BB77E',
+                    drawerActiveTintColor: '#fff',
+                    drawerLabelStyle: {
+                        marginLeft: -25,
+                        fontSize: 15,
+                        marginVertical: 2,
+                    },
                 }}
-            />
-            <Drawer.Screen
-                name="Products"
-                component={ProductsScreen}
-                options={{
-                    drawerIcon: ({ color }) => (
-                        <MaterialCommunityIcons
-                            name="storefront-outline"
-                            size={25}
-                            color={color}
-                        />
-                    ),
-                }}
-            />
-            <Drawer.Screen
-                name="WishList"
-                component={WishListScreen}
-                options={{
-                    drawerIcon: ({ color }) => (
-                        <Ionicons name="heart-outline" size={25} color={color} />
-                    ),
-                }}
-            />
-            <Drawer.Screen
-                name="Cart"
-                component={CartScreen}
-                options={{
-                    drawerIcon: ({ color }) => (
-                        <Ionicons name="cart-outline" size={25} color={color} />
-                    ),
-                }}
-            />
-            <Drawer.Screen
-                name="My Order"
-                component={OrderScreen}
-                options={{
-                    drawerIcon: ({ color }) => (
-                        <Ionicons name="reader-outline" size={25} color={color} />
-                    ),
-                }}
-            />
-            <Drawer.Screen
-                name="Profile"
-                component={ProfileScreen}
-                options={{
-                    drawerIcon: ({ color }) => (
-                        <Ionicons name="person-circle-outline" size={25} color={color} />
-                    ),
-                }}
-            />
-        </Drawer.Navigator>
+                drawerContent={props => <DrawerItems {...props} />}>
+                <Drawer.Screen
+                    name="Home"
+                    component={BottomTab}
+                    options={{
+                        drawerIcon: ({ color }) => (
+                            <Icon name="home-outline" size={25} color={color} />
+                        ),
+                    }}
+                />
+                <Drawer.Screen
+                    name="Products"
+                    component={ProductsScreen}
+                    options={{
+                        drawerIcon: ({ focused }) => (
+                            <Image
+                                source={require('../Assets/Images/BottomTab/shop.png')}
+                                style={{
+                                    width: 20,
+                                    height: 20,
+                                    resizeMode: 'contain',
+                                    opacity: focused ? 1 : 0.7,
+                                    tintColor: focused ? '#fff' : null,
+                                }}
+                            />
+                        ),
+                    }}
+                />
+                <Drawer.Screen
+                    name="WishList"
+                    component={WishListScreen}
+                    options={{
+                        drawerIcon: ({ color }) => (
+                            <Icon name="heart-outline" size={25} color={color} />
+                        ),
+                    }}
+                />
+                <Drawer.Screen
+                    name="Cart"
+                    component={CartScreen}
+                    options={{
+                        drawerIcon: ({ focused }) => (
+                            <Image
+                                source={require('../Assets/Images/BottomTab/cart.png')}
+                                style={{
+                                    width: 20,
+                                    height: 20,
+                                    resizeMode: 'contain',
+                                    opacity: focused ? 1 : 0.7,
+                                    tintColor: focused ? '#fff' : null,
+                                }}
+                            />
+                        ),
+                    }}
+                />
+                <Drawer.Screen
+                    name="My Orders"
+                    component={OrderScreen}
+                    options={{
+                        drawerIcon: ({ color }) => (
+                            <Icon name="reader-outline" size={25} color={color} />
+                        ),
+                    }}
+                />
+                <Drawer.Screen
+                    name="Profile"
+                    component={ProfileScreen}
+                    options={{
+                        drawerIcon: ({ color }) => (
+                            <Icon name="person-circle-outline" size={25} color={color} />
+                        ),
+                    }}
+                />
+            </Drawer.Navigator>
+        </>
     );
 };
 
 export default Main;
-
-const styles = StyleSheet.create({});

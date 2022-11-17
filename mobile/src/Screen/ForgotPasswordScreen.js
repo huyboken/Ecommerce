@@ -1,11 +1,13 @@
-import { SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native'
-import React, { useState } from 'react'
+import { SafeAreaView, StyleSheet } from 'react-native'
+import React from 'react'
 import ForgotPassword from '../Components/Authentication/ForgotPassword'
 
 const ForgotPasswordScreen = () => {
     return (
         <SafeAreaView style={styles.container}>
-            <ForgotPassword />
+            <ScrollView>
+                <ForgotPassword />
+            </ScrollView>
         </SafeAreaView>
     )
 }
@@ -16,6 +18,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: '#e5e5e5',
     },
 })

@@ -1,43 +1,52 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import {
+    Dimensions,
+    Image,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from 'react-native';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Colors } from '../../Constant';
-import Display from '../../Utils/Display';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { removeCart, updateCart } from '../../Redux/Actions/ProductAction';
+import { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
-const Cart = () => {
-    const { cartData } = useSelector(state => state.cart);
-    const dispatch = useDispatch();
-    const navigation = useNavigation()
-    const [quantity, setQuantity] = useState(1);
-    const [totalPrice, setTotalPrice] = useState(0);
+var height = Dimensions.get('window').height;
+var width = Dimensions.get('window').width;
 
-    const decreaseQuantity = id => {
+export default function Cart() {
+    const { cartData } = useSelector(state => state.cart);
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [quantity, setQuantity] = useState(1);
+
+    const navigation = useNavigation();
+    const dispatch = useDispatch();
+
+    // decrease quantity
+    const decreaseQuantity = (id) => {
         if (quantity > 1) {
             setQuantity(quantity - 1);
             dispatch(updateCart(id, quantity - 1));
         }
     };
 
-    const increaseQuantity = (id, Stock, name) => {
+    // increase quantity
+    const increaseQuantity = (id, Stock) => {
         if (Stock - 1 < quantity) {
-            alert(`${name} out of stock`)
+            alert('`${items.productName} out of stock`')
         } else {
-            setQuantity(quantity + 1)
-            dispatch(updateCart(id, quantity + 1))
+            setQuantity(quantity + 1);
+            dispatch(updateCart(id, quantity + 1));
         }
     };
 
+    // remove item from cart
     const cartRemoveHandler = (id, name) => {
         alert(`${name} removed from cart`)
-        dispatch(removeCart(id))
-    }
-
-    const openOrder = () => {
-        navigation.navigate("OrderScreen")
-    }
+        dispatch(removeCart(id));
+    };
 
     useEffect(() => {
         setTotalPrice(
@@ -54,16 +63,18 @@ const Cart = () => {
     }, [cartData, quantity]);
 
     return (
-        <>
+        <View>
             {cartData && cartData.length > 0 ? (
                 <>
                     {cartData &&
                         cartData.map((items, index) => (
                             <View
                                 style={{
+                                    width: width * 1,
                                     flexDirection: 'row',
                                     alignItems: 'center',
-                                    padding: Display.width * 0.05,
+                                    paddingHorizontal: width * 0.05,
+                                    paddingVertical: width * 0.05,
                                 }}
                                 key={index}>
                                 <Image
@@ -74,136 +85,160 @@ const Cart = () => {
                                     style={{
                                         flexDirection: 'column',
                                         justifyContent: 'flex-start',
-                                        width: Display.width / 1.8,
+                                        width: width / 1.8,
                                     }}>
-                                    <Text
-                                        style={{
-                                            fontSize: 20,
-                                            color: Colors.BLACK,
-                                            paddingHorizontal: 5,
-                                            marginBottom: 5,
-                                        }}>
-                                        {items.productName}
-                                    </Text>
+                                    <Text style={styles.productName}>{items.productName}</Text>
                                     <View
                                         style={{
                                             flexDirection: 'row',
                                             justifyContent: 'flex-start',
                                         }}>
                                         <TouchableOpacity
-                                            style={[styles.quantityBox, { marginLeft: 5 }]}
-                                            onPress={() => decreaseQuantity(items._id)}>
-                                            <Text
-                                                style={{
-                                                    fontSize: 20,
-                                                    fontWeight: '800',
-                                                    color: Colors.WHITE,
-                                                }}>
-                                                -
-                                            </Text>
+                                            onPress={() => decreaseQuantity(items._id, items.Stock)}>
+                                            <View
+                                                style={[
+                                                    styles.quantityBox,
+                                                    {
+                                                        marginLeft: width * 0.05,
+                                                    },
+                                                ]}>
+                                                <Text
+                                                    style={{
+                                                        fontSize: 20,
+                                                        color: '#fff',
+                                                        fontWeight: '800',
+                                                    }}>
+                                                    -
+                                                </Text>
+                                            </View>
                                         </TouchableOpacity>
-                                        <Text style={{ fontSize: 20, color: Colors.BLACK }}>
+                                        <Text
+                                            style={{
+                                                fontSize: 20,
+                                                color: '#333',
+                                            }}>
                                             {quantity.toString()}
                                         </Text>
                                         <TouchableOpacity
-                                            style={styles.quantityBox}
-                                            onPress={() => increaseQuantity(items._id, items.Stock, items.productName)}>
-                                            <Text
-                                                style={{
-                                                    fontSize: 20,
-                                                    fontWeight: '800',
-                                                    color: Colors.WHITE,
-                                                }}>
-                                                +
-                                            </Text>
+                                            onPress={() => increaseQuantity(items._id, items.Stock)}>
+                                            <View style={styles.quantityBox}>
+                                                <Text
+                                                    style={{
+                                                        fontSize: 20,
+                                                        color: '#fff',
+                                                        fontWeight: '800',
+                                                    }}>
+                                                    +
+                                                </Text>
+                                            </View>
                                         </TouchableOpacity>
                                         <TouchableOpacity
-                                            onPress={() => cartRemoveHandler(items._id, items.productName)}>
-                                            <Ionicons
+                                            onPress={() =>
+                                                cartRemoveHandler(items._id, items.productName)
+                                            }>
+                                            <Icon
                                                 name="ios-trash"
-                                                size={20}
-                                                color={Colors.CRIMSON}
+                                                size={30}
+                                                color="crimson"
                                                 style={{ marginHorizontal: 10 }}
                                             />
                                         </TouchableOpacity>
                                     </View>
                                 </View>
                                 <View>
-                                    <Text
-                                        style={{
-                                            fontSize: 22,
-                                            color: Colors.BLACK,
-                                            fontWeight: '700',
-                                        }}>
+                                    <Text style={styles.productPrice}>
                                         $ {items.productPrice * quantity}
                                     </Text>
                                 </View>
                             </View>
                         ))}
-                    <>
-                        <View style={{ backgroundColor: '#999', flex: 1 }}>
-                            <View
-                                style={{
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                    flexDirection: 'row',
-                                    marginVertical: 10,
-                                }}>
-                                <Text style={{ color: '#333', fontSize: 20, paddingLeft: 15 }}>
-                                    Total Price:
-                                </Text>
-                                <Text
-                                    style={{
-                                        color: Colors.CRIMSON,
-                                        fontSize: 22,
-                                        paddingRight: 15,
-                                        fontWeight: '700',
-                                    }}>
-                                    ${totalPrice}
-                                </Text>
-                            </View>
-                        </View>
-                        <TouchableOpacity
-                            onPress={openOrder}
+                    <View>
+                        <View
                             style={{
-                                backgroundColor: '#FB578E',
-                                width: Display.width / 2 + 40,
-                                height: 50,
-                                borderRadius: 10,
-                                justifyContent: 'center',
+                                width: width * 1,
+                                height: 1,
+                                backgroundColor: '#999',
+                            }}
+                        />
+                        <View
+                            style={{
+                                width: width * 1,
+                                justifyContent: 'space-between',
                                 alignItems: 'center',
-                                alignSelf: 'center',
+                                flexDirection: 'row',
+                                marginVertical: 20,
                             }}>
-                            <Text
-                                style={{ color: Colors.WHITE, fontSize: 18, fontWeight: '700' }}>
-                                Go to Checkout
+                            <Text style={{ color: '#333', fontSize: 20, paddingLeft: 15 }}>
+                                Total Price:
                             </Text>
-                        </TouchableOpacity>
-                    </>
+                            <Text
+                                style={{
+                                    color: 'crimson',
+                                    fontSize: 22,
+                                    paddingRight: 15,
+                                    fontWeight: '700',
+                                }}>
+                                ${totalPrice}
+                            </Text>
+                        </View>
+                        <View
+                            style={{
+                                width: width * 1,
+                                alignItems: 'center',
+                            }}>
+                            <TouchableOpacity
+                                style={{
+                                    backgroundColor: '#3BB77E',
+                                    width: width / 2 + 40,
+                                    height: 50,
+                                    borderRadius: 10,
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                }}
+                                onPress={() => navigation.navigate('OrderScreen')}>
+                                <Text style={{ color: '#fff', fontSize: 18, fontWeight: '700' }}>
+                                    Go to Checkout
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
                 </>
             ) : (
-                <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-                    <Text
-                        style={{ fontSize: 20, color: Colors.BLACK, textAlign: 'center' }}>
-                        Your cart is empty 😢
+                <View
+                    style={{
+                        height: height * 1,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
+                    <Text style={{ color: '#333', fontSize: 20, textAlign: 'center' }}>
+                        Your Cart is empty 😢
                     </Text>
                 </View>
             )}
-        </>
+        </View>
     );
-};
-
-export default Cart;
+}
 
 const styles = StyleSheet.create({
+    productName: {
+        fontSize: 20,
+        color: '#333',
+        paddingHorizontal: width * 0.05,
+        marginBottom: 5,
+    },
+    productPrice: {
+        fontSize: 22,
+        color: '#333',
+        fontWeight: '700',
+    },
     quantityBox: {
         width: 35,
         height: 35,
-        backgroundColor: '#FB578E',
+        backgroundColor: '#3BB77E',
         borderRadius: 5,
         flexDirection: 'row',
-        justifyContent: 'center',
         alignItems: 'center',
+        justifyContent: 'center',
         marginHorizontal: 10,
     },
 });

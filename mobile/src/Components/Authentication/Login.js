@@ -2,182 +2,172 @@ import {
     StyleSheet,
     Text,
     View,
-    TextInput,
+    Dimensions,
     TouchableOpacity,
+    TextInput,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import Display from '../../Utils/Display';
-import { Colors } from '../../Constant';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native';
+var { width } = Dimensions.get('window');
+import Icon from 'react-native-vector-icons/Ionicons';
+import { userLogin } from '../../Redux/Actions/UserAction';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser } from '../../Redux/Actions/UserAction';
-import NotiModal from '../Modal/NotiModal';
+import { useNavigation } from '@react-navigation/native';
 
-const Login = () => {
-    const navigation = useNavigation();
+export default function Login() {
     const dispatch = useDispatch();
-    const [loginEmail, setLoginEmail] = useState('');
-    const [loginPassword, setLoginPassword] = useState('');
-    const [modalVisible, setModalVisible] = useState(false);
+    const navigation = useNavigation();
 
-    const { loading, isAuthenticated, error } = useSelector(state => state.user);
+    const { error, isAuthenticated } = useSelector(state => state.user);
 
-    const loginSubmit = () => {
-        dispatch(loginUser(loginEmail, loginPassword));
-    };
-    const openForgot = () => {
-        navigation.navigate('ForgotPassword');
-    };
-    const onpenSignUp = () => {
-        navigation.navigate('SignUp');
-    };
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
+    const loginSubmit = e => {
+        e.preventDefault();
+        dispatch(userLogin(email, password));
+    };
     useEffect(() => {
         if (error) {
-            setModalVisible(true);
+            alert(error)
         }
         if (isAuthenticated) {
-            alert('Login!');
+            alert('yeah login!')
         }
-    }, [loading, isAuthenticated, error, alert]);
+    }, [dispatch, error, isAuthenticated]);
 
     return (
         <View style={styles.container}>
-            <View style={styles.loginHeader}>
-                <Text style={styles.textHeader}>Welcome</Text>
-                <Text style={styles.textHeader1}>Sign in to continue!</Text>
+            <View style={styles.LoginHeader}>
+                <Text
+                    style={{
+                        fontSize: 30,
+                        fontWeight: '700',
+                        fontFamily: 'Roboto',
+                        color: '#333',
+                    }}>
+                    Welcome,
+                </Text>
+                <Text
+                    style={{
+                        fontSize: 20,
+                        fontWeight: '500',
+                        color: '#555',
+                    }}>
+                    Sign in to continue!
+                </Text>
             </View>
-            <View style={styles.loginBox}>
+            <View style={styles.LoginBox}>
                 <View style={styles.relative}>
-                    <Ionicons name="mail-open-outline" size={25} style={styles.icon} />
+                    <Icon name="mail-open-outline" size={25} style={styles.icon} />
                     <TextInput
                         placeholder="Write your email..."
-                        placeholderTextColor={Colors.BLACK}
+                        placeholderTextColor="#333"
                         style={styles.inputBox}
-                        textContentType={'emailAddress'}
-                        keyboardType={'email-address'}
-                        value={loginEmail}
-                        onChangeText={setLoginEmail}
+                        textContentType="emailAddress"
+                        keyboardType="email-address"
+                        value={email}
+                        onChangeText={setEmail}
                     />
                 </View>
                 <View style={styles.relative}>
-                    <Ionicons name="lock-closed-outline" size={25} style={styles.icon} />
+                    <Icon name="lock-closed-outline" size={25} style={styles.icon} />
                     <TextInput
                         placeholder="Write your password..."
-                        placeholderTextColor={Colors.BLACK}
+                        placeholderTextColor="#333"
                         style={styles.inputBox}
-                        textContentType={'password'}
+                        textContentType="password"
                         secureTextEntry={true}
-                        value={loginPassword}
-                        onChangeText={setLoginPassword}
+                        value={password}
+                        onChangeText={setPassword}
                     />
-                    <Text onPress={openForgot} style={styles.textForgot}>
-                        Forgot password?
+                    <Text
+                        style={{
+                            textAlign: 'right',
+                            color: '#333',
+                            fontSize: 15,
+                        }}
+                        onPress={() => navigation.navigate('Forgot')}>
+                        Forgot Password ?
                     </Text>
-                    <TouchableOpacity onPress={loginSubmit} style={styles.buttonLogin}>
-                        <Text style={styles.textLogin}>Login</Text>
+                    <TouchableOpacity onPress={loginSubmit}>
+                        <View style={styles.Button}>
+                            <Text style={{ color: '#fff', fontSize: 18 }}>Login</Text>
+                        </View>
                     </TouchableOpacity>
                 </View>
             </View>
-            <View style={styles.footer}>
-                <Text style={styles.textFooter}>Not have any account? </Text>
-                <TouchableOpacity onPress={onpenSignUp}>
-                    <Text style={styles.textSignUp}>Sign Up</Text>
+            <View
+                style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    paddingTop: width / 6 - 20,
+                    justifyContent: 'flex-end',
+                }}>
+                <Text
+                    style={{
+                        color: '#333',
+                        fontSize: 15,
+                    }}>
+                    Not have any account ?
+                </Text>
+                <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+                    <Text
+                        style={{
+                            fontSize: 15,
+                            color: '#FB578E',
+                            paddingRight: 15,
+                        }}>
+                        {' '}
+                        Sign Up
+                    </Text>
                 </TouchableOpacity>
             </View>
-            <NotiModal
-                title={'Notification'}
-                content={error}
-                modalVisible={modalVisible}
-                setModalVisible={setModalVisible}
-                autoOff={true}
-            />
         </View>
     );
-};
-
-export default Login;
+}
 
 const styles = StyleSheet.create({
     container: {
-        width: Display.width * 1 - 20,
+        width: width * 1,
         padding: 20,
-        // backgroundColor: "#e5e5e5",
-        // height: Display.width * 2,
+        backgroundColor: '#e5e5e5',
+        height: width * 2,
     },
-    loginHeader: {
-        width: Display.width * 1,
+    LoginHeader: {
+        width: width * 1,
+        paddingTop: width / 5,
         paddingLeft: 10,
-        paddingTop: Display.width / 5,
-    },
-    textHeader: {
-        fontSize: 30,
-        fontFamily: 'Roboto',
-        fontWeight: '700',
-        color: Colors.BLACK,
-    },
-    textHeader1: {
-        fontSize: 20,
-        // fontFamily: "Roboto",
-        fontWeight: '500',
-        color: Colors.GRAY,
     },
     inputBox: {
-        width: Display.width * 1 - 50,
-        borderRadius: 10,
-        padding: 10,
+        width: width * 1 - 50,
         borderWidth: 1,
-        borderColor: '#FB578E',
-        fontSize: 15,
+        borderRadius: 15,
+        borderColor: '#3BB77E',
         paddingLeft: 45,
+        fontSize: 15,
+        color: '#333',
         marginVertical: 10,
-    },
-    icon: {
-        position: 'absolute',
-        top: 16,
-        left: 10,
-        color: '#FB578E',
-        zIndex: 10,
     },
     relative: {
         position: 'relative',
     },
-    loginBox: {
-        marginTop: Display.width / 4,
+    icon: {
+        position: 'absolute',
+        top: 20,
+        left: 10,
+        zIndex: 10,
+        color: '#FB578E',
     },
-    textForgot: {
-        textAlign: 'right',
-        fontSize: 15,
-        color: Colors.BLACK,
+    LoginBox: {
+        marginTop: width / 4,
     },
-    buttonLogin: {
+    Button: {
         width: '100%',
         height: 50,
         borderRadius: 10,
-        // backgroundColor: '#3BB77E',
-        backgroundColor: '#FB578E',
+        backgroundColor: '#3BB77E',
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: 50,
-    },
-    textLogin: {
-        fontSize: 18,
-        color: Colors.WHITE,
-    },
-    footer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        paddingTop: Display.width / 6 - 20,
-    },
-    textFooter: {
-        color: Colors.BLACK,
-        fontSize: 15,
-    },
-    textSignUp: {
-        fontSize: 15,
-        color: '#FB578E',
-        paddingRight: 15,
     },
 });

@@ -1,58 +1,62 @@
 import {
+    Dimensions,
     ScrollView,
     StyleSheet,
     Text,
     TouchableOpacity,
     View,
 } from 'react-native';
-import React, { useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
-import { Colors } from '../../Constant';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
 import ProductCard from '../Home/ProductCard';
-import Display from '../../Utils/Display';
+import { useNavigation } from '@react-navigation/native';
 
-const FilterProducts = () => {
+var { width } = Dimensions.get('window');
+
+const categories = [
+    {
+        id: 1,
+        name: 'All',
+    },
+    {
+        id: 2,
+        name: 'Personal',
+    },
+    {
+        id: 3,
+        name: 'cloth',
+    },
+    {
+        id: 4,
+        name: 'Ladies Cloth',
+    },
+    {
+        id: 5,
+        name: 'Gift',
+    },
+    {
+        id: 6,
+        name: 'Food',
+    },
+    {
+        id: 7,
+        name: 'Electronics',
+    },
+    {
+        id: 8,
+        name: 'Sports',
+    },
+];
+
+export default function FilterProducts() {
     const { products } = useSelector(state => state.products);
-    const [data, setData] = useState(products);
+    const { wishlistData } = useSelector(state => state.wishList);
+    const navigation = useNavigation();
     const [active, setActive] = useState('All');
+    const [data, setData] = useState(products);
 
-    const categories = [
-        {
-            id: 1,
-            name: 'All',
-        },
-        {
-            id: 2,
-            name: 'Personal',
-        },
-        {
-            id: 3,
-            name: 'cloth',
-        },
-        {
-            id: 4,
-            name: 'Ladies Cloth',
-        },
-        {
-            id: 5,
-            name: 'Gift',
-        },
-        {
-            id: 6,
-            name: 'Food',
-        },
-        {
-            id: 7,
-            name: 'Electronics',
-        },
-        {
-            id: 8,
-            name: 'Sports',
-        },
-    ];
-
-    const productsFilter = active => () => {
+    const productsFilter = active => {
         if (active !== 'All') {
             setData([...products.filter(item => item.category === active)]);
         } else {
@@ -64,68 +68,65 @@ const FilterProducts = () => {
     return (
         <View>
             <ScrollView
-                style={{ flexDirection: 'row', marginVertical: 10 }}
-                horizontal
+                style={{
+                    flexDirection: 'row',
+                    marginVertical: 10,
+                }}
+                horizontal={true}
                 showsHorizontalScrollIndicator={false}>
-                {categories.map((item, index) => (
+                {categories.map((i, index) => (
                     <TouchableOpacity
-                        style={[
-                            styles.category,
-                            active === item.name && styles.categoryActive,
-                        ]}
-                        key={index}
-                        onPress={productsFilter(item.name)}>
-                        <Text style={{ color: Colors.WHITE, textAlign: 'center' }}>
-                            {item.name}
-                        </Text>
+                        onPress={() => productsFilter(i.name)}
+                        style={[styles.name, active === i.name && styles.nameActive]}
+                        key={index}>
+                        <Text style={{ color: '#fff' }}>{i.name}</Text>
                     </TouchableOpacity>
                 ))}
             </ScrollView>
-
             <View style={styles.productCard}>
                 {data.length === 0 ? (
-                    <Text
-                        style={{
-                            color: Colors.BLACK,
-                            marginTop: 100,
-                            alignSelf: 'center',
-                            fontSize: 16,
-                        }}>
+                    <Text style={{ color: '#000', marginTop: 100, fontSize: 16 }}>
                         No Products Found!
                     </Text>
                 ) : (
                     <>
                         {data &&
-                            data.map(item => <ProductCard key={item._id} product={item} />)}
+                            data.map(product => (
+                                <ProductCard
+                                    key={product._id}
+                                    product={product}
+                                    navigation={navigation}
+                                    wishlistData={wishlistData}
+                                />
+                            ))}
                     </>
                 )}
             </View>
         </View>
     );
-};
-
-export default FilterProducts;
+}
 
 const styles = StyleSheet.create({
-    category: {
-        backgroundColor: Colors.CRIMSON,
+    name: {
         borderRadius: 15,
+        backgroundColor: 'crimson',
+        marginHorizontal: 5,
         paddingHorizontal: 8,
         paddingVertical: 5,
-        marginHorizontal: 5,
-        marginTop: 10,
-        justifyContent: 'center',
         alignItems: 'center',
+        justifyContent: 'center',
+        color: 'white',
+        textAlign: 'center',
+        marginBottom: 10,
     },
-    categoryActive: {
-        backgroundColor: Colors.BLACK,
+    nameActive: {
+        backgroundColor: '#000',
     },
     productCard: {
-        width: Display.width * 1 - 10,
+        width: width * 1 - 10,
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'center',
         alignItems: 'center',
-        // marginBottom: 20,
     },
 });

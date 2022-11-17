@@ -1,57 +1,90 @@
 import axios from 'axios';
 import URI from '../URI';
 
-//Login user
-export const loginUser = (email, password) => async dispatch => {
+// Login User
+export const userLogin = (email, password) => async dispatch => {
     try {
-        dispatch({ type: 'userLoginRequest' });
+        dispatch({
+            type: 'userLoginRequest',
+        });
+
         const config = { headers: { 'Content-Type': 'application/json' } };
+
         const { data } = await axios.post(
             `${URI}/api/v2/login`,
             { email, password },
             config,
         );
-        dispatch({ type: 'userLoginSuccess', payload: data.user });
+        dispatch({
+            type: 'userLoginSuccess',
+            payload: data.user,
+        });
     } catch (error) {
-        dispatch({ type: 'userLoginFail', payload: error.response.data.message });
+        dispatch({
+            type: 'userLoginFalse',
+            payload: error.response.data.message,
+        });
     }
 };
 
-//Registration user
-export const registerUser =
-    (name, email, password, avatar) => async dispatch => {
-        try {
-            dispatch({ type: 'userCreateRequest' });
-            const config = { headers: { 'Content-Type': 'application/json' } };
-            const { data } = await axios.post(
-                `${URI}/api/v2/registration`,
-                { name, email, password, avatar },
-                config,
-            );
-            dispatch({ type: 'userCreateSuccess', payload: data.user });
-        } catch (error) {
-            dispatch({ type: 'userCreateFail', payload: error.response.data.message });
-        }
-    };
+// Registration User
+export const register = (name, email, password, avatar) => async dispatch => {
+    try {
+        dispatch({ type: 'userCreateRequest' });
 
-//Load user
+        const { data } = await axios.post(
+            `${URI}/api/v2/registration`,
+            { name, email, password, avatar },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            },
+        );
+        dispatch({ type: 'userCreateSuccess', payload: data.user });
+    } catch (error) {
+        dispatch({
+            type: 'userCreateFail',
+            payload: error.response.data.message,
+        });
+    }
+};
+
+// Load User
 export const loadUser = () => async dispatch => {
     try {
         dispatch({ type: 'userLoadRequest' });
+
         const { data } = await axios.get(
             `${URI}/api/v2/me`,
         );
+
         dispatch({ type: 'userLoadSuccess', payload: data.user });
     } catch (error) {
         dispatch({ type: 'userLoadFailed', payload: error.response.data.message });
     }
 };
 
-//Forgot password
+// Log out User
+
+export const logOutUser = () => async dispatch => {
+    try {
+        await axios.get(
+            `${URI}/api/v2/logout`,
+        );
+        dispatch({ type: 'userLogOutSucess' });
+    } catch (error) {
+        dispatch({ type: 'userLogOutFail', payload: error.response.data.message });
+    }
+};
+
+// Forgot Password
 export const forgotPassword = email => async dispatch => {
     try {
         dispatch({ type: 'forgotPasswordRequest' });
+
         const config = { headers: { 'Content-Type': 'application/json' } };
+
         const { data } = await axios.post(
             `${URI}/api/v2/password/forgot`,
             { email },
@@ -59,16 +92,31 @@ export const forgotPassword = email => async dispatch => {
         );
         dispatch({ type: 'forgotPasswordSuccess', payload: data.message });
     } catch (error) {
-        dispatch({ type: 'userLoadFailed', payload: error.response.data.message });
+        dispatch({
+            type: 'forgotPasswordFailed',
+            payload: error.response.data.message,
+        });
     }
 };
 
-//Logout user
-export const logOutUser = () => async dispatch => {
+// update profile
+export const updateProfile = (name, email, avatar) => async dispatch => {
     try {
-        await axios.get(`${URI}/api/v2/logout`);
-        dispatch({ type: 'userLogOutSuccess' });
+        dispatch({ type: 'updateProfileReducer' });
+
+        const config = { headers: { 'Content-Type': 'application/json' } };
+
+        const { data } = await axios.put(
+            `${URI}/api/v2/me/update/info`,
+            { name, email, avatar },
+            config,
+        );
+        dispatch({ type: 'updateProfileSuccess', payload: data.success });
     } catch (error) {
-        dispatch({ type: 'userLogOutFail', payload: error.response.data.message });
+        dispatch({
+            type: 'updateProfileFailed',
+            payload: error.response.data.message,
+        });
+        console.log(error.response.data.message);
     }
 };

@@ -1,314 +1,514 @@
 import {
-    Image,
-    Platform,
-    SafeAreaView,
-    ScrollView,
     StyleSheet,
     Text,
-    TextInput,
-    TouchableOpacity,
     View,
+    Image,
+    Dimensions,
+    ScrollView,
+    TouchableOpacity,
+    TextInput,
 } from 'react-native';
-import React, { useState } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import Display from '../../Utils/Display';
-import Ionicon from 'react-native-vector-icons/Ionicons';
-import { Colors } from '../../Constant';
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+var { width } = Dimensions.get('window');
+var height = Dimensions.get('window').height;
+import Icon from 'react-native-vector-icons/Ionicons';
 import Swiper from 'react-native-swiper';
+import {
+    addCart,
+    addWishList,
+    createReview,
+    getCart,
+    getProduct,
+    removeWishList,
+} from '../../Redux/Actions/ProductAction';
+import { useNavigation } from '@react-navigation/native';
 
-const ProductDetails = () => {
-    const { params } = useRoute();
+export default function ProductDetails({ route }) {
     const navigation = useNavigation();
-
     const [click, setClick] = useState(false);
+    const [cart, setCart] = useState(false);
+    const [quantity, setQuantity] = useState(1);
+    const [data, setData] = useState('');
+    const [cartdata, setCartData] = useState();
+    const { user } = useSelector(state => state.user);
+    const { cartData } = useSelector(state => state.cart);
 
-    const goBack = () => {
-        navigation.goBack();
+    const [rating, setRating] = useState(0);
+    const [comment, setComment] = useState('');
+
+    const dispatch = useDispatch();
+
+    // Add to WishList
+    const wishListHandler = () => {
+        setClick(true);
+        dispatch(
+            addWishList(
+                route.params?.item.name,
+                1,
+                route.params?.item.images[0].url,
+                route.params?.item.price,
+                user._id,
+                route.params?.item._id,
+                route.params?.item.Stock,
+            ),
+        );
+        alert(`${route.params?.item.name} Added to wishlist`)
     };
 
+    // Remove from wishlist
+    const removeWishListData = data => {
+        setClick(false);
+        let id = data;
+        dispatch(removeWishList(id));
+        alert(`${route.params?.item.name} removed from wishlist`)
+    };
+
+    // decreaseQuantity handler
+    const decreaseQuantity = () => {
+        if (quantity > 1) {
+            setQuantity(quantity - 1);
+        }
+    };
+
+    // increaseQuantity handler
+    const increaseQuantity = () => {
+        if (route.params?.item.Stock - 1 < quantity) {
+            alert(`${route.params?.item.name} out of stock`)
+        } else {
+            setQuantity(quantity + 1);
+        }
+    };
+
+    // addToCartHandler
+    const addToCartHandler = async () => {
+        await dispatch(
+            addCart(
+                route.params?.item.name,
+                quantity,
+                route.params?.item.images[0].url,
+                route.params?.item.price,
+                user._id,
+                route.params?.item._id,
+                route.params?.item.Stock,
+            ),
+        );
+        alert(`${route.params?.item.name} added to cart successfully`)
+    };
+
+    // cartAlreadyAdded handler
+    const cartAlreadyAdded = () => {
+        alert(route.params?.item.Stock === 0
+            ? `${route.params?.item.name} out of stock`
+            : `${route.params?.item.name} already have in cart`)
+    };
+
+    // create review
+    const commentHandler = async productId => {
+        if (comment.length === 0 || rating === 0) {
+            alert('Please fill the comment box and add rating')
+        } else {
+            dispatch(createReview(rating, comment, productId));
+            alert('Review added successfully')
+            navigation.navigate('Home');
+        }
+    };
+
+    // wishListDataProvider && CartDataProvider
+    useEffect(() => {
+        if (route.params?.wishlistData && route.params?.wishlistData.length > 0) {
+            route.params?.wishlistData.map(data => {
+                setData(data);
+                if (data.productId === route.params?.item._id) {
+                    setClick(true);
+                }
+            });
+        }
+        if (cartData && cartData.length > 0) {
+            cartData.map(data => {
+                setCartData(data);
+                if (data.productId === route.params?.item._id) {
+                    setCart(true);
+                }
+            });
+        }
+        dispatch(getCart());
+    }, [route.params?.wishlistData, cartData]);
+
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={styles.productDetailsTop}>
-                    <TouchableOpacity onPress={goBack}>
-                        <Ionicon name="arrow-back" size={30} color={Colors.BLACK} />
-                    </TouchableOpacity>
-                    {click ? (
-                        <Ionicon
-                            name="heart"
-                            size={30}
-                            style={{
-                                marginRight: 10,
-                                color: 'crimson',
-                                position: 'absolute',
-                                bottom: 5,
-                                right: 0,
-                            }}
-                            onPress={() => setClick(!click)}
-                        />
-                    ) : (
-                        <Ionicon
-                            name="heart-outline"
-                            size={30}
-                            style={{
-                                marginRight: 10,
-                                color: '#333',
-                                position: 'absolute',
-                                bottom: 5,
-                                right: 0,
-                            }}
-                            onPress={() => setClick(!click)}
-                        />
-                    )}
-                </View>
+        <View
+            style={{
+                elevation: 8,
+                backgroundColor: '#fff',
+                width: width * 1,
+            }}>
+            <View style={styles.productDetailsTop}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <Icon name="arrow-back" color="#333" size={30} />
+                </TouchableOpacity>
+                {click ? (
+                    <Icon
+                        name="heart"
+                        size={30}
+                        style={{
+                            marginRight: 10,
+                            color: 'crimson',
+                            position: 'absolute',
+                            bottom: 0,
+                            right: 0,
+                        }}
+                        onPress={() => removeWishListData(data._id)}
+                    />
+                ) : (
+                    <Icon
+                        name="heart-outline"
+                        size={30}
+                        style={{
+                            marginRight: 10,
+                            color: '#333',
+                            position: 'absolute',
+                            bottom: 0,
+                            right: 0,
+                        }}
+                        onPress={wishListHandler}
+                    />
+                )}
+            </View>
+            <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
                 <View style={styles.swiper}>
-                    <Swiper
-                        showsButtons={params.images.length === 1 ? false : true}
-                        autoplay
-                        autoplayTimeout={4}>
-                        {params.images.map(item => (
-                            <Image
-                                style={styles.banner}
-                                source={{ uri: item.url }}
-                                key={item._id}
-                            />
+                    <Swiper showButtons={true} autoplay={true} autoplayTimeout={4}>
+                        {route.params?.item.images.map(i => (
+                            <Image source={{ uri: i.url }} style={styles.banner} key={i._id} />
                         ))}
                     </Swiper>
                 </View>
                 <View style={styles.details_box}>
                     <View style={styles.details}>
-                        <Text
-                            style={{ color: Colors.BLACK, fontSize: 20, fontWeight: '600' }}>
-                            {params.name}
-                        </Text>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <View>
                             <Text
                                 style={{
-                                    color: Colors.GRAY,
+                                    color: '#333',
+                                    fontSize: 20,
+                                    fontWeight: '600',
+                                }}>
+                                {route.params?.item.name}
+                            </Text>
+                        </View>
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                            }}>
+                            <Text
+                                style={{
+                                    color: '#555',
                                     fontSize: 15,
+                                    fontWeight: '600',
                                     textDecorationLine: 'line-through',
                                     marginRight: 10,
                                     marginBottom: 10,
-                                    fontWeight: '600',
                                 }}>
-                                {`${params.offerPrice}` && `$${params.offerPrice}`}
+                                {route.params?.item.offerPrice.length === 0
+                                    ? null
+                                    : '$' + route.params?.item.offerPrice}
                             </Text>
                             <Text
-                                style={{ color: Colors.BLACK, fontSize: 18, fontWeight: '600' }}>
-                                ${params.price}
+                                style={{
+                                    color: '#333',
+                                    fontSize: 18,
+                                    fontWeight: '600',
+                                }}>
+                                ${route.params?.item.price}
                             </Text>
                         </View>
                     </View>
                     <View style={styles.description}>
                         <Text
-                            style={{ color: Colors.BLACK, fontSize: 18, fontWeight: '600' }}>
+                            style={{
+                                color: '#333',
+                                fontSize: 18,
+                                fontWeight: '600',
+                            }}>
                             Description
                         </Text>
                         <Text
                             style={{
-                                color: Colors.BLACK,
+                                color: '#555',
                                 fontSize: 15,
+                                fontWeight: '500',
                                 lineHeight: 20,
                                 paddingTop: 10,
                             }}>
-                            {params.description}
+                            {route.params?.item.description}
                         </Text>
                     </View>
                     <View style={styles.quantity}>
-                        <View style={styles.quantityBox}>
+                        <TouchableOpacity onPress={decreaseQuantity}>
+                            <View style={styles.quantityBox}>
+                                <Text
+                                    style={{
+                                        fontSize: 20,
+                                        color: '#fff',
+                                        fontWeight: '800',
+                                    }}>
+                                    -
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}>
                             <Text
-                                style={{ fontSize: 20, color: Colors.WHITE, fontWeight: '600' }}>
-                                -
+                                style={{
+                                    color: '#333',
+                                    fontSize: 16,
+                                }}>
+                                {quantity.toString()}
                             </Text>
                         </View>
-                        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                            <Text style={{ color: Colors.BLACK, fontSize: 16 }}>1</Text>
-                        </View>
-                        <View style={styles.quantityBox}>
-                            <Text
-                                style={{ fontSize: 20, color: Colors.WHITE, fontWeight: '600' }}>
-                                +
-                            </Text>
-                        </View>
+                        <TouchableOpacity onPress={increaseQuantity}>
+                            <View style={styles.quantityBox}>
+                                <Text
+                                    style={{
+                                        fontSize: 20,
+                                        color: '#fff',
+                                        fontWeight: '800',
+                                    }}>
+                                    +
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
                     </View>
-                    <View style={{ width: Display.width * 1 - 30, alignItems: 'center' }}>
-                        <View style={styles.button}>
+                    <View
+                        style={{
+                            width: width * 1 - 30,
+                            alignItems: 'center',
+                        }}>
+                        {cart === true || route.params?.item.Stock === 0 ? (
+                            <TouchableOpacity
+                                onPress={cartAlreadyAdded}
+                                style={[
+                                    styles.button,
+                                    {
+                                        backgroundColor: '#000',
+                                    },
+                                ]}>
+                                <View>
+                                    <Text
+                                        style={{
+                                            fontSize: 18,
+                                            color: '#fff',
+                                            fontWeight: '600',
+                                        }}>
+                                        Add to Cart
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                        ) : (
+                            <TouchableOpacity
+                                onPress={addToCartHandler}
+                                style={[
+                                    styles.button,
+                                    {
+                                        backgroundColor: '#3BB77E',
+                                    },
+                                ]}>
+                                <View>
+                                    <Text
+                                        style={{
+                                            fontSize: 18,
+                                            color: '#fff',
+                                            fontWeight: '600',
+                                        }}>
+                                        Add to Cart
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                        )}
+                        <View style={styles.reviews}>
                             <Text
-                                style={{ fontSize: 18, color: Colors.WHITE, fontWeight: '600' }}>
-                                Add to cart
-                            </Text>
-                        </View>
-                        <View style={styles.review}>
-                            <Text
-                                style={{ fontSize: 18, color: Colors.BLACK, fontWeight: '600' }}>
+                                style={{
+                                    fontSize: 18,
+                                    color: '#333',
+                                    fontWeight: '600',
+                                }}>
                                 Reviews
                             </Text>
-                            {params.reviews.length === 0 ? (
+                            {route.params?.item.reviews.length === 0 ? (
                                 <Text
                                     style={{
                                         textAlign: 'center',
                                         paddingTop: 5,
-                                        color: Colors.BLACK,
+                                        color: '#333',
                                     }}>
-                                    No reviews have yet
+                                    No reviews have yet...
                                 </Text>
                             ) : (
-                                <>
-                                    {params.reviews.map(item => (
+                                <View>
+                                    {route.params?.item.reviews.map(i => (
                                         <View
+                                            key={i._id}
                                             style={{
                                                 flexDirection: 'row',
                                                 alignItems: 'flex-start',
                                                 paddingVertical: 5,
-                                            }}
-                                            key={item._id}>
+                                            }}>
                                             <Text
                                                 style={{
                                                     fontSize: 15,
-                                                    color: Colors.BLACK,
+                                                    color: '#333',
                                                     fontWeight: '700',
                                                     paddingLeft: 5,
                                                 }}>
-                                                {item.name}
+                                                {i.name}
                                                 <Text
                                                     style={{
                                                         fontSize: 15,
                                                         color: '#555',
                                                         fontWeight: '600',
+                                                        paddingLeft: 5,
                                                     }}>
-                                                    {' '}
-                                                    {item.comment}
+                                                    {'  '}
+                                                    {i.comment}
                                                 </Text>
                                             </Text>
-                                            <Ionicon
-                                                name="star"
-                                                color={Colors.GOLDEN_ROD}
-                                                size={18}
-                                            />
-                                            <Text style={{ color: Colors.BLACK }}>({item.rating})</Text>
+                                            <Icon name="star" color="#C68600" size={18} />
+                                            <Text style={{ color: '#333' }}>({i.rating})</Text>
                                         </View>
                                     ))}
-                                </>
+                                </View>
                             )}
+                            <View
+                                style={{
+                                    marginTop: 10,
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                }}>
+                                <Text
+                                    style={{
+                                        fontSize: 18,
+                                        color: '#555',
+                                        fontWeight: '600',
+                                        paddingRight: 10,
+                                    }}>
+                                    Your ratings*
+                                </Text>
+                                <TouchableOpacity onPress={() => setRating(1)}>
+                                    <Icon
+                                        name={rating > 0 ? 'star' : 'star-outline'}
+                                        color="#C68600"
+                                        size={18}
+                                        style={{ marginHorizontal: 2 }}
+                                    />
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => setRating(2)}>
+                                    <Icon
+                                        name={rating > 1 ? 'star' : 'star-outline'}
+                                        color="#C68600"
+                                        size={18}
+                                        style={{ marginHorizontal: 2 }}
+                                    />
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => setRating(3)}>
+                                    <Icon
+                                        name={rating > 2 ? 'star' : 'star-outline'}
+                                        color="#C68600"
+                                        size={18}
+                                        style={{ marginHorizontal: 2 }}
+                                    />
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => setRating(4)}>
+                                    <Icon
+                                        name={rating > 3 ? 'star' : 'star-outline'}
+                                        color="#C68600"
+                                        size={18}
+                                        style={{ marginHorizontal: 2 }}
+                                    />
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => setRating(5)}>
+                                    <Icon
+                                        name={rating > 4 ? 'star' : 'star-outline'}
+                                        color="#C68600"
+                                        size={18}
+                                        style={{ marginHorizontal: 2 }}
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                            <View
+                                style={{
+                                    marginTop: 10,
+                                    height: 100,
+                                }}>
+                                <TextInput
+                                    keyboardType="default"
+                                    placeholder="Add your comment..."
+                                    placeholderTextColor="#333"
+                                    textAlignVertical="top"
+                                    value={comment}
+                                    onChangeText={text => setComment(text)}
+                                    style={{
+                                        borderWidth: 1,
+                                        paddingLeft: 10,
+                                        color: '#333',
+                                        borderRadius: 5,
+                                        borderColor: '#0000002b',
+                                        height: '100%',
+                                    }}
+                                />
+                            </View>
+                            <TouchableOpacity
+                                style={{
+                                    alignItems: 'center',
+                                    marginBottom: 30,
+                                }}
+                                onPress={() => commentHandler(route.params?.item._id)}>
+                                <Text style={styles.submitButton}>Submit</Text>
+                            </TouchableOpacity>
                         </View>
-                    </View>
-                    <View
-                        style={{
-                            marginTop: 10,
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                        }}>
-                        <Text
-                            style={{
-                                fontSize: 18,
-                                color: '#555',
-                                fontWeight: '600',
-                                paddingRight: 10,
-                            }}>
-                            Your ratings
-                        </Text>
-                        <Ionicon
-                            name="star-outline"
-                            color={Colors.GOLDEN_ROD}
-                            size={18}
-                            style={{ marginHorizontal: 2 }}
-                        />
-                        <Ionicon
-                            name="star-outline"
-                            color={Colors.GOLDEN_ROD}
-                            size={18}
-                            style={{ marginHorizontal: 2 }}
-                        />
-                        <Ionicon
-                            name="star-outline"
-                            color={Colors.GOLDEN_ROD}
-                            size={18}
-                            style={{ marginHorizontal: 2 }}
-                        />
-                        <Ionicon
-                            name="star-outline"
-                            color={Colors.GOLDEN_ROD}
-                            size={18}
-                            style={{ marginHorizontal: 2 }}
-                        />
-                        <Ionicon
-                            name="star-outline"
-                            color={Colors.GOLDEN_ROD}
-                            size={18}
-                            style={{ marginHorizontal: 2 }}
-                        />
-                    </View>
-                    <View style={{ marginTop: 10 }}>
-                        <TextInput
-                            keyboardType="default"
-                            placeholder="Add your comment"
-                            placeholderTextColor={Colors.GRAY}
-                            textAlignVertical={'top'}
-                            multiline={true}
-                            numberOfLines={10}
-                            style={{
-                                borderWidth: 1,
-                                paddingHorizontal: 10,
-                                paddingVertical: 15,
-                                minHeight: 100,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                borderRadius: 10,
-                                borderColor: '#FB578E',
-                            }}
-                        />
-                    </View>
-                    <View style={{ alignItems: 'center' }}>
-                        <Text style={styles.submitButton}>Submit</Text>
                     </View>
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </View>
     );
-};
-
-export default ProductDetails;
+}
 
 const styles = StyleSheet.create({
     container: {
-        width: Display.width * 1,
-        height: Display.height * 1,
-        backgroundColor: Colors.WHITE
+        width: width * 1,
+        height: height * 1,
+        backgroundColor: '#fff',
     },
     productDetailsTop: {
-        width: Display.width * 1,
+        width: width * 1,
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
-        height: Platform.isPad ? Display.width / 9 - 20 : Display.width / 6 - 20,
-        backgroundColor: Colors.WHITE,
-        elevation: 8,
+        height: width / 6 - 20,
         paddingHorizontal: 10,
+        elevation: 8,
+        backgroundColor: '#fff',
     },
     banner: {
-        width: Display.width * 1,
-        height: Platform.isPad ? Display.width / 3 - 20 : Display.width / 2 - 20,
+        width: width * 1,
+        height: width / 2 - 20,
         resizeMode: 'contain',
         marginVertical: 10,
     },
     swiper: {
-        width: Display.width * 1,
-        height: Platform.isPad ? Display.width / 3 : Display.width / 2,
-        backgroundColor: Colors.WHITE,
+        width: width * 1,
+        height: width / 2,
+        backgroundColor: '#fff',
         position: 'relative',
     },
     details_box: {
-        backgroundColor: Colors.LIGHT_GREY1,
-        elevation: 8,
+        backgroundColor: '#e5e5e5',
         borderTopLeftRadius: 15,
         borderTopRightRadius: 15,
-        marginVertical: 20,
         padding: 20,
-
-        shadowColor: Colors.LIGHT_BLACK,
-        shadowOpacity: 0.2,
-        shadowRadius: 3,
-        shadowOffset: { width: 3, height: 3 },
+        marginTop: 20,
+        marginBottom: height / 8 - 60,
     },
     details: {
         flexDirection: 'row',
@@ -316,44 +516,47 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     description: {
+        flexDirection: 'column',
         paddingVertical: 10,
     },
     quantity: {
         flexDirection: 'row',
         marginTop: 10,
+        alignItems: 'center',
     },
     quantityBox: {
         width: 40,
         height: 40,
-        backgroundColor: '#FB578E',
-        justifyContent: 'center',
-        alignItems: 'center',
+        backgroundColor: '#3BB77E',
         borderRadius: 5,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
         marginHorizontal: 10,
     },
     button: {
-        backgroundColor: '#FB578E',
-        marginTop: 20,
         width: '70%',
         height: 50,
-        borderRadius: 10,
-        justifyContent: 'center',
+        marginTop: 20,
+        flexDirection: 'row',
         alignItems: 'center',
-    },
-    review: {
-        marginTop: 10,
-        width: Display.width * 1 - 20,
-        padding: 20,
+        justifyContent: 'center',
+        borderRadius: 5,
     },
     submitButton: {
         width: '70%',
-        backgroundColor: '#FB578E',
+        backgroundColor: '#3BB77E',
         marginTop: 20,
         borderRadius: 5,
         paddingVertical: 15,
-        textAlign: "center",
-        color: Colors.WHITE,
+        textAlign: 'center',
+        color: '#fff',
         fontSize: 18,
-        fontWeight: "600"
-    }
+        fontWeight: '600',
+    },
+    reviews: {
+        marginTop: 10,
+        width: width * 1,
+        padding: 20,
+    },
 });

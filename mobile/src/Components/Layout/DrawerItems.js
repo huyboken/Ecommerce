@@ -1,80 +1,71 @@
-import { Image, Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { Text, View, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
-import { Colors, Images } from '../../Constant';
 import {
     DrawerContentScrollView,
     DrawerItemList,
 } from '@react-navigation/drawer';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
 import { logOutUser } from '../../Redux/Actions/UserAction';
 
-const DrawerItems = props => {
-    const { user, error } = useSelector(state => state.user);
+export default function DrawerItems(props) {
     const dispatch = useDispatch();
+    const { user, error } = useSelector((state) => state.user);
 
-    const logout = () => {
-        dispatch(logOutUser())
+    const logOut = () => {
+        dispatch(logOutUser());
         if (error) {
             alert(error)
         }
-        alert("Logout success")
-    };
+        alert("Log out success")
+    }
+
     return (
-        <SafeAreaView style={styles.container}>
-            <Image source={{ uri: user.avatar?.url }} style={styles.avatar} />
-            <Text style={styles.name}>{user.name}</Text>
+        <View
+            style={{
+                flex: 1,
+                paddingVertical: 20,
+                margin: 0,
+            }}>
+            <Image
+                source={{
+                    uri: user.avatar.url
+                }}
+                style={{
+                    width: 60,
+                    height: 60,
+                    borderRadius: 120,
+                    marginLeft: 10,
+                }}
+            />
+            <Text style={{ color: '#333', fontSize: 16, paddingLeft: 10 }}>
+                {user.name}
+            </Text>
+
             <DrawerContentScrollView {...props}>
-                <View style={{ paddingTop: 10 }}>
+                <View
+                    style={{
+                        paddingTop: 10,
+                    }}>
                     <DrawerItemList {...props} />
                 </View>
             </DrawerContentScrollView>
-            <View>
-                <TouchableOpacity style={styles.logout} onPress={logout}>
-                    <Ionicons name="log-out-outline" style={styles.logoutIcon} />
-                    <Text style={styles.logoutText}>Logout</Text>
+            <View >
+                <TouchableOpacity
+                    style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        marginLeft: 20,
+                        marginBottom: 20
+                    }}
+                    onPress={logOut}
+                >
+                    <Icon name="log-out-outline" size={30} color="#333" />
+                    <Text style={{ color: '#333', fontSize: 16, paddingLeft: 10 }}>
+                        Log Out
+                    </Text>
                 </TouchableOpacity>
             </View>
-        </SafeAreaView>
+        </View>
     );
-};
-
-export default DrawerItems;
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingVertical: 20,
-        margin: 0,
-    },
-    avatar: {
-        height: Platform.isPad ? 100 : 60,
-        width: Platform.isPad ? 100 : 60,
-        borderRadius: 120,
-        marginLeft: 10,
-        borderWidth: 1,
-        borderColor: '#FB578E',
-        marginVertical: 10
-    },
-    name: {
-        fontSize: 16,
-        paddingLeft: 10,
-        color: Colors.BLACK,
-    },
-    logout: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 20,
-        marginLeft: 20,
-    },
-    logoutIcon: {
-        fontSize: 30,
-        color: Colors.BLACK,
-    },
-    logoutText: {
-        paddingLeft: 10,
-        fontSize: 16,
-        color: Colors.BLACK,
-    },
-});
+}
