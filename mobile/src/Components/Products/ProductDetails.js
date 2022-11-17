@@ -7,6 +7,7 @@ import {
     ScrollView,
     TouchableOpacity,
     TextInput,
+    SafeAreaView,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -136,7 +137,7 @@ export default function ProductDetails({ route }) {
     }, [route.params?.wishlistData, cartData]);
 
     return (
-        <View
+        <SafeAreaView
             style={{
                 elevation: 8,
                 backgroundColor: '#fff',
@@ -471,7 +472,7 @@ export default function ProductDetails({ route }) {
                     </View>
                 </View>
             </ScrollView>
-        </View>
+        </SafeAreaView>
     );
 }
 

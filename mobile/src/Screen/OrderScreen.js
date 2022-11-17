@@ -1,4 +1,4 @@
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -29,7 +29,7 @@ export default function OrderScreen() {
 
 const MyOrder = ({ orders }) => {
     return (
-        <View>
+        <SafeAreaView>
             {orders && orders.length > 0 ? (
                 orders.map((item, index) => (
                     <>
@@ -86,7 +86,7 @@ const MyOrder = ({ orders }) => {
                     <Text>Your OrderList is empty!</Text>
                 </View>
             )}
-        </View>
+        </SafeAreaView>
     );
 };
 

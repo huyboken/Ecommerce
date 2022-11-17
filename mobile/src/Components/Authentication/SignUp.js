@@ -52,6 +52,9 @@ export default function SignUp() {
 
     return (
         <View style={styles.container}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Icon name='arrow-back' size={30} color="black" />
+            </TouchableOpacity>
             <View style={styles.LoginHeader}>
                 <Text
                     style={{
@@ -210,6 +213,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: '#333',
         marginVertical: 10,
+        height: 50
     },
     relative: {
         position: 'relative',

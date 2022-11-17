@@ -147,6 +147,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: '#333',
         marginVertical: 10,
+        height: 50
     },
     relative: {
         position: 'relative',
